@@ -10,9 +10,7 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <div className="divider" />
         <Work />
-        <div className="divider" />
         <Craft />
         <Contact />
       </main>

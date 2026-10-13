@@ -1,132 +1,162 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 const projects = [
   {
+    index: "01",
     title: "SQL Database",
-    meta: "Schema · Queries · ER",
+    meta: "Relational systems",
     href: "https://github.com/VagishSharma01/SQL_Database",
-    image: "/images/project-sql.jpg",
-    copy: "A social-platform relational model — users, posts, likes, comments, hashtags, follows — with DDL, analytical queries, and an ER diagram ready for a product frontend.",
+    image: "/images/work-sql-lux.jpg",
+    copy: "A complete social-platform schema — users, posts, media, likes, comments, hashtags, follows — with DDL, query patterns, and an ER model built for a real product surface.",
   },
   {
+    index: "02",
     title: "Movie App",
-    meta: "HTML · CSS · JS · TMDb",
+    meta: "Product interface",
     href: "https://github.com/VagishSharma01/Movie_App",
-    image: "/images/project-movie.jpg",
-    copy: "A polished movie explorer with live search, rating-forward cards, and responsive layout — built as a crisp client experience on public film data.",
+    image: "/images/work-movie-lux.jpg",
+    copy: "A refined movie explorer on TMDb: search, rating-forward presentation, and responsive composition — an exercise in clarity over chrome.",
   },
   {
+    index: "03",
     title: "Number Plate Detection",
-    meta: "Python · OpenCV · OCR",
+    meta: "Computer vision",
     href: "https://github.com/VagishSharma01/Number_Plate_detection",
-    image: "/images/project-anpd.jpg",
-    copy: "Computer-vision pipeline for locating plates and extracting alphanumerics from still imagery — cascade detection meeting CNN/OCR recognition.",
+    image: "/images/work-anpd-lux.jpg",
+    copy: "Detection and recognition from still imagery — OpenCV cascade work meeting CNN/OCR extraction under imperfect lighting.",
   },
   {
+    index: "04",
     title: "Art Image Classification",
-    meta: "Transfer learning · SVM",
+    meta: "Applied machine learning",
     href: "https://github.com/VagishSharma01/Art_Image_Classification",
-    image: "/images/project-art.jpg",
-    copy: "Ensemble classification across GoogLeNet, VGG-19, Xception, and ResNet-50 with an SVM head — applied ML with a museum-grade visual problem.",
+    image: "/images/work-art-lux.jpg",
+    copy: "Transfer-learning ensemble across GoogLeNet, VGG-19, Xception, and ResNet-50 with an SVM head — methodical model comparison, not demo theater.",
   },
 ];
 
-export function Work() {
+function ProjectBlock({
+  p,
+  reverse,
+}: {
+  p: (typeof projects)[number];
+  reverse: boolean;
+}) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["8%", "-8%"]);
+
   return (
-    <section id="work" className="relative px-5 py-28 md:px-8 md:py-36">
-      <div className="mx-auto max-w-[1200px]">
-        <div className="mb-16 max-w-2xl md:mb-24">
-          <p className="eyebrow mb-4">Selected work</p>
-          <h2 className="display text-[clamp(2.4rem,6vw,4.4rem)]">
-            Projects with
-            <span className="serif block text-[var(--warm)]">
-              substance, not noise.
-            </span>
-          </h2>
+    <motion.a
+      ref={ref}
+      href={p.href}
+      target="_blank"
+      rel="noreferrer"
+      className="project group block border-t border-[var(--line)] py-14 md:py-20"
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+    >
+      <div
+        className={`grid items-center gap-8 md:grid-cols-12 md:gap-12 ${
+          reverse ? "" : ""
+        }`}
+      >
+        <div
+          className={`media-frame aspect-[16/10] md:col-span-7 ${
+            reverse ? "md:order-2" : ""
+          }`}
+        >
+          <motion.div style={{ y }} className="absolute inset-[-8%]">
+            <Image
+              src={p.image}
+              alt=""
+              fill
+              sizes="(max-width: 768px) 100vw, 58vw"
+              className="object-cover"
+            />
+          </motion.div>
         </div>
 
-        <div className="flex flex-col gap-20 md:gap-28">
+        <div className={`md:col-span-5 ${reverse ? "md:order-1" : ""}`}>
+          <div className="mb-5 flex items-baseline justify-between gap-4">
+            <p className="eyebrow">{p.meta}</p>
+            <span className="font-[family-name:var(--font-mono)] text-[0.68rem] tracking-[0.16em] text-[var(--muted)]">
+              {p.index}
+            </span>
+          </div>
+          <h3 className="display text-[clamp(2.2rem,4.5vw,3.6rem)]">{p.title}</h3>
+          <p className="mt-5 max-w-md text-[1.05rem] leading-relaxed text-[var(--ink-soft)]">
+            {p.copy}
+          </p>
+          <span className="mt-8 inline-flex items-center gap-3 font-[family-name:var(--font-mono)] text-[0.68rem] uppercase tracking-[0.16em] text-[var(--accent)]">
+            View repository
+            <span className="h-px w-10 bg-[var(--accent)] transition-all group-hover:w-16" />
+          </span>
+        </div>
+      </div>
+    </motion.a>
+  );
+}
+
+export function Work() {
+  return (
+    <section id="work" className="px-5 md:px-10">
+      <div className="mx-auto max-w-[1400px] py-20 md:py-28">
+        <div className="mb-6 grid gap-8 md:grid-cols-12 md:items-end">
+          <div className="md:col-span-7">
+            <p className="eyebrow mb-4">Selected work</p>
+            <h2 className="display text-[clamp(2.8rem,7vw,5.5rem)]">
+              Substance
+              <span className="serif block text-[var(--warm)]">over spectacle.</span>
+            </h2>
+          </div>
+          <p className="max-w-sm text-[var(--ink-soft)] md:col-span-5 md:justify-self-end md:text-right">
+            Public repositories that show how I think about data, interfaces, and
+            applied systems — not a wallpaper of badges.
+          </p>
+        </div>
+
+        <div>
           {projects.map((p, i) => (
-            <motion.a
-              key={p.title}
-              href={p.href}
-              target="_blank"
-              rel="noreferrer"
-              className="project-row group grid items-center gap-8 md:grid-cols-12 md:gap-10"
-              initial={{ opacity: 0, y: 36 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.25 }}
-              transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <div
-                className={`project-media relative aspect-[16/10] overflow-hidden rounded-[2px] md:col-span-7 ${
-                  i % 2 === 1 ? "md:order-2" : ""
-                }`}
-              >
-                <Image
-                  src={p.image}
-                  alt=""
-                  fill
-                  sizes="(max-width: 768px) 100vw, 58vw"
-                  className="object-cover"
-                />
-              </div>
-              <div
-                className={`md:col-span-5 ${i % 2 === 1 ? "md:order-1" : ""}`}
-              >
-                <p className="eyebrow mb-3">{p.meta}</p>
-                <h3 className="display text-[clamp(1.8rem,3.5vw,2.8rem)]">
-                  {p.title}
-                </h3>
-                <p className="mt-4 text-[1.05rem] leading-relaxed text-[var(--muted)]">
-                  {p.copy}
-                </p>
-                <span className="mt-6 inline-flex items-center gap-2 font-[family-name:var(--font-mono)] text-[0.72rem] uppercase tracking-[0.14em] text-[var(--accent)]">
-                  Open repository
-                  <span className="transition-transform group-hover:translate-x-1">
-                    →
-                  </span>
-                </span>
-              </div>
-            </motion.a>
+            <ProjectBlock key={p.title} p={p} reverse={i % 2 === 1} />
           ))}
         </div>
 
-        <motion.div
-          className="mt-24 border-t border-[var(--line)] pt-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-        >
-          <p className="eyebrow mb-6">Also from the resume</p>
-          <ul className="grid gap-6 md:grid-cols-3">
+        <div className="mt-8 border-t border-[var(--line)] pt-14">
+          <p className="eyebrow mb-8">Also on the resume</p>
+          <div className="grid gap-10 md:grid-cols-3">
             {[
               {
                 t: "Flight Booking System",
-                d: ".NET Core · ASP.NET Web API · SQL Server · React · JWT",
+                d: ".NET Core, ASP.NET Web API, SQL Server, React, JWT — booking flows with RBAC and query tuning for availability search.",
               },
               {
                 t: "AI Document Intelligence",
-                d: "Azure OpenAI · OCR · Python pipelines for structured extraction",
+                d: "Azure OpenAI + OCR pipelines that pull structured fields from PDFs, Word, and images.",
               },
               {
                 t: "Enterprise service-order APIs",
-                d: "Partner Create / Patch / Get · SQL tuning (~30% latency) · 50+ integration fixes",
+                d: "Partner Create / Patch / Get endpoints, SQL latency work (~30%), fifty-plus integration fixes across API and data layers.",
               },
             ].map((item) => (
-              <li key={item.t} className="border-l border-[var(--line)] pl-5">
-                <h4 className="display text-xl">{item.t}</h4>
-                <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">
+              <article key={item.t} className="border-t border-[var(--ink)] pt-5">
+                <h3 className="display text-2xl">{item.t}</h3>
+                <p className="mt-3 text-[0.98rem] leading-relaxed text-[var(--ink-soft)]">
                   {item.d}
                 </p>
-              </li>
+              </article>
             ))}
-          </ul>
-        </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   );

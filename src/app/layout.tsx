@@ -37,7 +37,7 @@ const plexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: "Vagish Sharma — Backend Software Engineer",
   description:
-    "Backend Software Engineer focused on C#, .NET, SQL Server, Azure, and REST APIs. Open to backend and software engineering roles.",
+    "Backend Software Engineer focused on C#, .NET, SQL Server, Azure, and REST APIs.",
   openGraph: {
     title: "Vagish Sharma — Backend Software Engineer",
     description: "C# / .NET · SQL Server · Azure · REST APIs",
@@ -54,7 +54,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${syne.variable} ${instrument.variable} ${plex.variable} ${plexMono.variable} h-full`}
     >
       <body className="min-h-full antialiased">
-        <div className="grain" aria-hidden />
         <SmoothScroll>
           <div className="site-shell">{children}</div>
         </SmoothScroll>
