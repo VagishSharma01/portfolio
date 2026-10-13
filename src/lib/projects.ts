@@ -54,6 +54,142 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: "pr-review-agents",
+    title: "PR Review Agents",
+    outcome: "Multi-agent PR reviewer: Security, Performance, Style → one Lead Reviewer comment.",
+    stack: ["Python", "FastAPI", "Multi-agent", "GitHub Webhooks"],
+    overview:
+      "Event-driven multi-agent system that reviews pull requests with specialist agents and synthesizes a single actionable review comment. Ships with a flawed sample PR, CLI, web UI, and optional GitHub webhook posting.",
+    problem:
+      "PR feedback is scattered across checklists. Recruiters and teams want an autonomous review path that still surfaces severity and merge guidance clearly.",
+    architecture: [
+      "PR files (local sample or GitHub API) → specialist agents",
+      "Security Agent · Performance Agent · Style Agent (parallel analysis)",
+      "Lead Reviewer synthesizes findings into markdown",
+      "Optional webhook posts the comment back to the PR",
+    ],
+    implementation: [
+      "Deterministic analyzers for secrets, eval/exec, nested loops, SQL anti-patterns, and style hygiene.",
+      "Lead Reviewer severity rollup with merge recommendation.",
+      "Optional OpenAI enrichment when OPENAI_API_KEY is set; mock mode works with zero keys.",
+    ],
+    decisions: [
+      "Keep specialist findings deterministic so demos stay reproducible without LLM spend.",
+      "Use the LLM only to preface/enrich the lead summary, never to invent unsupported vulns.",
+    ],
+    challenges: [
+      "Balancing noisy style findings against signal — capped and de-duplicated style output.",
+      "Webhook path needs GitHub token + secret; local/sample path remains the default demo.",
+    ],
+    evidence: [
+      "Public repo with sample_pr/, CLI, FastAPI UI, and live Vercel demo.",
+      "Sample run surfaces critical eval() + hardcoded secret findings.",
+    ],
+    links: [
+      { label: "Full case study", href: "/work/pr-review-agents" },
+      {
+        label: "Live demo",
+        href: "https://pr-review-agents-five.vercel.app",
+        external: true,
+      },
+      {
+        label: "GitHub",
+        href: "https://github.com/VagishSharma01/pr-review-agents",
+        external: true,
+      },
+    ],
+  },
+  {
+    slug: "market-analyst-agent",
+    title: "Market Analyst Agent",
+    outcome: "Tool-calling research agent: live quote → news → metrics → investment briefing.",
+    stack: ["Python", "FastAPI", "ReAct", "Yahoo Finance"],
+    overview:
+      "Single-agent ReAct loop that accepts a market query, chooses tools (quote, news, metrics), and returns a structured markdown briefing. Web UI shows the tool trace.",
+    problem:
+      "Static LLM answers go stale. The agent must fetch live market context and show which tools it called.",
+    architecture: [
+      "User query → planner (LLM or rule-based mock)",
+      "Tools: get_stock_quote · get_company_news · calculate_metrics",
+      "Observations fed back into the loop → final briefing",
+    ],
+    implementation: [
+      "OpenAI tool-calling mode when a key is present; deterministic mock planner otherwise.",
+      "Live Yahoo Finance chart/search APIs for quotes and headlines.",
+      "CLI + FastAPI UI + JSON API deployed on Vercel.",
+    ],
+    decisions: [
+      "Expose the full tool trace in the UI so the agent path is auditable.",
+      "Fall back to mock planner on LLM failure so demos never hard-fail.",
+    ],
+    challenges: [
+      "News search relevance varies by ticker — briefing labels sources clearly.",
+      "Not financial advice; framed as research tooling.",
+    ],
+    evidence: [
+      "Public repo + live demo at market-analyst-agent-smoky.vercel.app.",
+      "Mock mode still hits live quote/news APIs.",
+    ],
+    links: [
+      { label: "Full case study", href: "/work/market-analyst-agent" },
+      {
+        label: "Live demo",
+        href: "https://market-analyst-agent-smoky.vercel.app",
+        external: true,
+      },
+      {
+        label: "GitHub",
+        href: "https://github.com/VagishSharma01/market-analyst-agent",
+        external: true,
+      },
+    ],
+  },
+  {
+    slug: "doc-intel-agent",
+    title: "Document Intelligence Agent",
+    outcome: "Agentic invoice pipeline: plan → OCR normalize → extract → validate → persist.",
+    stack: ["Python", "FastAPI", "OCR", "SQLite"],
+    overview:
+      "Agentic document pipeline that plans extraction, normalizes text, pulls structured invoice fields, validates totals/line items, and stores the run. Portfolio upgrade of document-intelligence work with a public runnable demo.",
+    problem:
+      "Unstructured invoices need stable fields for downstream systems — with a clear agent path and validation, not a black-box prompt.",
+    architecture: [
+      "Document text / upload → Planner",
+      "OCR normalize → Field extractor (rules or LLM)",
+      "Schema validator → SQLite run memory",
+      "Markdown report for each run",
+    ],
+    implementation: [
+      "Rule-based extractor for offline demos; optional OpenAI JSON extraction.",
+      "Validator checks vendor, invoice number, total, and line-item sum consistency.",
+      "Persists runs to SQLite for simple agent memory.",
+    ],
+    decisions: [
+      "Separate OCR cleanup from extraction so each step is testable.",
+      "Fail validation loudly when line items disagree with total.",
+    ],
+    challenges: [
+      "Layout variety — mock mode covers common invoice patterns; LLM mode improves messy text.",
+      "Binary PDF OCR left as a production swap (Azure Document Intelligence / Tesseract).",
+    ],
+    evidence: [
+      "Public repo + live demo; sample invoice extracts vendor, INV number, totals, line items.",
+    ],
+    links: [
+      { label: "Full case study", href: "/work/doc-intel-agent" },
+      {
+        label: "Live demo",
+        href: "https://doc-intel-agent.vercel.app",
+        external: true,
+      },
+      {
+        label: "GitHub",
+        href: "https://github.com/VagishSharma01/doc-intel-agent",
+        external: true,
+      },
+    ],
+  },
+  {
     slug: "flight-booking",
     title: "Flight Booking System",
     outcome: "Booking backend with JWT/RBAC, search APIs, and SQL-tuned availability.",
@@ -90,44 +226,6 @@ export const projects: Project[] = [
       {
         label: "Request walkthrough",
         href: "mailto:vagishsharma1234@gmail.com?subject=Flight%20Booking%20System",
-        external: true,
-      },
-    ],
-  },
-  {
-    slug: "document-intelligence",
-    title: "Document Intelligence",
-    outcome: "OCR + Azure OpenAI pipeline for structured extraction from messy documents.",
-    stack: ["Python", "Azure OpenAI", "OCR"],
-    overview:
-      "Document-processing pipeline that extracts and classifies structured information from PDFs, Word files, and images for invoices, resumes, and contracts.",
-    problem:
-      "Manual review of unstructured documents is slow and error-prone; consumers need stable structured fields.",
-    architecture: [
-      "Document ingest (PDF / Word / image)",
-      "OCR for text recovery from scans/images",
-      "Azure OpenAI extraction / summarization per document type",
-      "Structured field output for downstream systems",
-    ],
-    implementation: [
-      "Document-specific extraction and summarization workflows.",
-      "Automated structured-field extraction to reduce manual data entry.",
-    ],
-    decisions: [
-      "Expose AI results through a clear extraction contract so backends get fields, not free-form prose.",
-    ],
-    challenges: [
-      "Handling varied document layouts while keeping output schema stable.",
-    ],
-    evidence: [
-      "Resume case study — Azure OpenAI + OCR + Python.",
-      "Source not public — architecture walkthrough available on request.",
-    ],
-    links: [
-      { label: "Full case study", href: "/work/document-intelligence" },
-      {
-        label: "Request walkthrough",
-        href: "mailto:vagishsharma1234@gmail.com?subject=Document%20Intelligence",
         external: true,
       },
     ],

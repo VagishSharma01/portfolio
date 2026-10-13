@@ -256,7 +256,16 @@ CREATE TABLE post (
           <div className="skill-group">
             <h3>Cloud & AI</h3>
             <div className="skills">
-              {["Azure", "AWS", "Azure OpenAI", "EC2", "S3", "IAM"].map((s) => (
+              {[
+                "Azure",
+                "AWS",
+                "Azure OpenAI",
+                "Python agents",
+                "FastAPI",
+                "EC2",
+                "S3",
+                "IAM",
+              ].map((s) => (
                 <span key={s} className="skill">
                   {s}
                 </span>
@@ -313,6 +322,14 @@ CREATE TABLE post (
               The ~30% service-order read improvement came from indexing and
               procedure shape — not a new cache layer. Measure the hot query,
               fix the plan, then re-check the same path.
+            </p>
+          </article>
+          <article className="note">
+            <h3>Agents that show their work</h3>
+            <p>
+              For portfolio agent demos I keep a deterministic tool path (and a
+              visible trace) so reviewers can see quote → news → metrics or
+              security → performance → style without needing an API key.
             </p>
           </article>
         </div>
