@@ -23,10 +23,18 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Vagish Sharma — Backend Software Engineer",
+  title: "Vagish Sharma — Software Engineer (.NET / SQL / Azure)",
   description:
-    "Backend Software Engineer focused on C#, .NET, SQL Server, Azure, and REST APIs.",
+    "Software engineer focused on C#/.NET REST APIs, SQL Server performance, and cloud-connected applications. Open to backend and full-stack roles.",
+  openGraph: {
+    title: "Vagish Sharma — Software Engineer (.NET / SQL / Azure)",
+    description:
+      "Reliable APIs, database performance, enterprise integrations. C# · .NET · SQL Server · Azure.",
+    url: "https://vagish-sharma.vercel.app",
+    type: "website",
+  },
   metadataBase: new URL("https://vagish-sharma.vercel.app"),
+  alternates: { canonical: "https://vagish-sharma.vercel.app" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

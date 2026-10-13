@@ -3,15 +3,15 @@
 import { useEffect, useState } from "react";
 
 const links = [
-  { href: "#about", id: "about", label: "About" },
-  { href: "#stack", id: "stack", label: "Stack" },
+  { href: "#hero", id: "hero", label: "Intro" },
+  { href: "#work", id: "work", label: "Projects" },
   { href: "#experience", id: "experience", label: "Experience" },
-  { href: "#work", id: "work", label: "Work" },
+  { href: "#stack", id: "stack", label: "Skills" },
   { href: "#contact", id: "contact", label: "Contact" },
 ];
 
 export function Rail() {
-  const [active, setActive] = useState("about");
+  const [active, setActive] = useState("hero");
 
   useEffect(() => {
     const sections = links
@@ -25,7 +25,7 @@ export function Rail() {
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (visible?.target?.id) setActive(visible.target.id);
       },
-      { rootMargin: "-25% 0px -55% 0px", threshold: [0.15, 0.4, 0.7] },
+      { rootMargin: "-20% 0px -55% 0px", threshold: [0.15, 0.4, 0.7] },
     );
 
     sections.forEach((s) => io.observe(s));
@@ -39,9 +39,9 @@ export function Rail() {
         <br />
         Sharma
       </div>
-      <div className="role">Backend Software Engineer</div>
-      <p>
-        APIs, SQL, cloud. Built for production — not for a screenshot gallery.
+      <div className="role">Software Engineer · Bengaluru</div>
+      <p className="rail-blurb">
+        Production APIs, SQL performance, and cloud-connected backends.
       </p>
 
       <nav className="rail-nav" aria-label="Sections">
@@ -58,6 +58,9 @@ export function Rail() {
       </nav>
 
       <div className="rail-links">
+        <a className="link btn-primary" href="/Vagish_Sharma_Resume.pdf" download>
+          Resume
+        </a>
         <a className="link" href="mailto:vagishsharma1234@gmail.com">
           Email
         </a>
@@ -68,14 +71,6 @@ export function Rail() {
           rel="noreferrer"
         >
           GitHub
-        </a>
-        <a
-          className="link"
-          href="https://www.linkedin.com/in/vagish-sharma-531132283/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          LinkedIn
         </a>
       </div>
     </aside>

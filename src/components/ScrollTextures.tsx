@@ -13,7 +13,7 @@ export function ScrollTextures() {
   const grainOpacity = useTransform(
     scrollYProgress,
     [0, 0.2, 0.6, 1],
-    [0.11, 0.17, 0.2, 0.14],
+    [0.06, 0.1, 0.12, 0.08],
   );
   const veil = useTransform(
     scrollYProgress,
