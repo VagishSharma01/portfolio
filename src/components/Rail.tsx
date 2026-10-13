@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 
 const links = [
-  { href: "#hero", id: "hero", label: "Profile" },
-  { href: "#work", id: "work", label: "Selected work" },
-  { href: "#experience", id: "experience", label: "Experience" },
-  { href: "#stack", id: "stack", label: "Stack" },
-  { href: "#notes", id: "notes", label: "Notes" },
-  { href: "#contact", id: "contact", label: "Contact" },
+  { href: "#hero", id: "hero", label: "Profile", num: "00" },
+  { href: "#work", id: "work", label: "Selected work", num: "01" },
+  { href: "#experience", id: "experience", label: "Experience", num: "02" },
+  { href: "#stack", id: "stack", label: "Stack", num: "03" },
+  { href: "#notes", id: "notes", label: "Notes", num: "04" },
+  { href: "#contact", id: "contact", label: "Contact", num: "05" },
 ];
 
 export function Rail() {
@@ -34,7 +34,7 @@ export function Rail() {
   }, []);
 
   return (
-    <aside className="rail">
+    <aside className="rail" aria-label="Site">
       <div className="brand">
         Vagish
         <br />
@@ -51,7 +51,11 @@ export function Rail() {
             key={l.id}
             href={l.href}
             className={active === l.id ? "active" : undefined}
+            aria-current={active === l.id ? "true" : undefined}
           >
+            <span className="num" aria-hidden>
+              {l.num}
+            </span>
             <span className="tick" aria-hidden />
             {l.label}
           </a>
@@ -72,6 +76,14 @@ export function Rail() {
           rel="noreferrer"
         >
           GitHub
+        </a>
+        <a
+          className="btn"
+          href="https://www.linkedin.com/in/vagish-sharma-531132283/"
+          target="_blank"
+          rel="noreferrer"
+        >
+          LinkedIn
         </a>
       </div>
     </aside>

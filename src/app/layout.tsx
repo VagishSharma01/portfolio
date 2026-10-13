@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Sans, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { ScrollTextures } from "@/components/ScrollTextures";
@@ -10,8 +10,8 @@ const space = Space_Grotesk({
   weight: ["500", "600", "700"],
 });
 
-const plex = IBM_Plex_Sans({
-  variable: "--font-plex",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
 });
@@ -41,15 +41,19 @@ export const metadata: Metadata = {
     title: "Vagish Sharma — Software Engineer",
     description: "C# · .NET · SQL Server · REST APIs · Azure",
   },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${space.variable} ${plex.variable} ${jb.variable} h-full`}
+      className={`${space.variable} ${inter.variable} ${jb.variable} h-full`}
     >
       <body className="min-h-full antialiased">
+        <a className="skip-link" href="#main">
+          Skip to main content
+        </a>
         <SmoothScroll>
           <ScrollTextures />
           <div className="shell">{children}</div>

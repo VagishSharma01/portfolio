@@ -21,7 +21,7 @@ function Chapter({
       className="chapter"
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
+      viewport={{ once: true, amount: 0.12 }}
       transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
     >
       <div className="chapter-head">
@@ -35,7 +35,7 @@ function Chapter({
 
 function ApiDiagram() {
   return (
-    <div className="diagram" aria-hidden>
+    <div className="diagram" role="img" aria-label="Partner clients to .NET REST API to SQL Server">
       <svg viewBox="0 0 640 200">
         <rect width="640" height="200" fill="#0c1014" />
         <rect x="24" y="68" width="118" height="52" rx="3" fill="#10151b" stroke="#53e2cb" />
@@ -66,6 +66,111 @@ function ApiDiagram() {
   );
 }
 
+function AgentFlowDiagram({
+  label,
+  steps,
+}: {
+  label: string;
+  steps: string[];
+}) {
+  const w = 640;
+  const gap = 12;
+  const boxW = (w - 48 - gap * (steps.length - 1)) / steps.length;
+  return (
+    <div className="diagram" role="img" aria-label={label}>
+      <svg viewBox="0 0 640 120">
+        <rect width="640" height="120" fill="#0c1014" />
+        {steps.map((s, i) => {
+          const x = 24 + i * (boxW + gap);
+          return (
+            <g key={s}>
+              {i > 0 ? (
+                <path
+                  d={`M${x - gap} 60 H${x}`}
+                  stroke="#53e2cb"
+                  strokeWidth="1.25"
+                />
+              ) : null}
+              <rect
+                x={x}
+                y="34"
+                width={boxW}
+                height="52"
+                rx="3"
+                fill="#10151b"
+                stroke={i === steps.length - 1 ? "#e5b477" : "#29313b"}
+              />
+              <text
+                x={x + boxW / 2}
+                y="65"
+                fill="#e1e6ef"
+                fontSize="11"
+                textAnchor="middle"
+                fontFamily="monospace"
+              >
+                {s}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
+    </div>
+  );
+}
+
+function ProjectVisual({ slug }: { slug: string }) {
+  if (slug === "service-order-api") return <ApiDiagram />;
+  if (slug === "pr-review-agents") {
+    return (
+      <AgentFlowDiagram
+        label="Security, Performance, Style agents into Lead Reviewer"
+        steps={["Security", "Perf", "Style", "Lead"]}
+      />
+    );
+  }
+  if (slug === "market-analyst-agent") {
+    return (
+      <AgentFlowDiagram
+        label="Quote, news, metrics tools into briefing"
+        steps={["Quote", "News", "Metrics", "Report"]}
+      />
+    );
+  }
+  if (slug === "doc-intel-agent") {
+    return (
+      <AgentFlowDiagram
+        label="Plan, OCR, extract, validate, persist"
+        steps={["Plan", "OCR", "Extract", "Validate"]}
+      />
+    );
+  }
+  if (slug === "sql-database") {
+    return (
+      <div className="code-panel" aria-label="SQL schema excerpt">
+        <pre>{`CREATE TABLE users (
+  user_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255) UNIQUE NOT NULL,
+  email VARCHAR(30) NOT NULL
+);
+CREATE TABLE post (
+  post_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+  user_id INTEGER NOT NULL,
+  FOREIGN KEY(user_id) REFERENCES users(user_id)
+);`}</pre>
+      </div>
+    );
+  }
+  if (slug === "flight-booking") {
+    return (
+      <AgentFlowDiagram
+        label="Client to API to SQL with JWT"
+        steps={["React", "Web API", "JWT", "SQL"]}
+      />
+    );
+  }
+  return null;
+}
+
 export function Chapters() {
   return (
     <div>
@@ -75,10 +180,13 @@ export function Chapters() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
+        aria-labelledby="hero-title"
       >
-        <p className="hero-kicker">Vagish Sharma / Software Engineering · 01 — Profile</p>
-        <h1 className="hero-title">I build backend systems that work in production.</h1>
-        <p className="hero-stack">C# / .NET / REST APIs / SQL Server / Azure</p>
+        <p className="hero-kicker">Vagish Sharma / Software Engineering · 00 — Profile</p>
+        <h1 id="hero-title" className="hero-title">
+          I build backend systems that work in production.
+        </h1>
+        <p className="hero-stack">C# / .NET / REST APIs / SQL SERVER / AZURE</p>
         <p className="lead">
           Software engineer focused on reliable APIs, database performance, and
           enterprise integrations. I build and troubleshoot backend workflows,
@@ -93,7 +201,7 @@ export function Chapters() {
             Download résumé ↓
           </a>
         </div>
-        <div className="proof">
+        <div className="proof" aria-label="Proof points">
           <div className="proof-item">
             <strong>50+</strong>
             <span>Backend / integration defects resolved</span>
@@ -111,8 +219,8 @@ export function Chapters() {
 
       <Chapter id="work" num="01" title="Selected work">
         <p className="lead">
-          Evidence-driven projects. Gallery cards stay short — open a case study
-          for architecture, decisions, and proof.
+          Evidence-driven projects — production backend work, public agent demos,
+          and SQL engineering. Open a case study for architecture and decisions.
         </p>
         <div className="projects">
           {projects.map((p) => (
@@ -120,27 +228,23 @@ export function Chapters() {
               <div className="case-top">
                 <h3>
                   {p.title}
-                  {p.featured ? " · Featured" : ""}
+                  {p.featured ? <span className="case-badge">Featured</span> : null}
                 </h3>
-                <span className="case-meta">{p.stack.join(" · ")}</span>
+              </div>
+              <div className="tech-row">
+                {p.stack.map((t) => (
+                  <span key={t} className="tech">
+                    {t}
+                  </span>
+                ))}
               </div>
               <p className="outcome">{p.outcome}</p>
               <p className="detail">{p.problem}</p>
-              {p.slug === "service-order-api" ? <ApiDiagram /> : null}
-              {p.slug === "sql-database" ? (
-                <div className="code-panel">
-                  <pre>{`CREATE TABLE users (
-  user_id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(255) UNIQUE NOT NULL,
-  email VARCHAR(30) NOT NULL
-);
-CREATE TABLE post (
-  post_id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  user_id INTEGER NOT NULL,
-  FOREIGN KEY(user_id) REFERENCES users(user_id)
-);`}</pre>
-                </div>
-              ) : null}
+              <ProjectVisual slug={p.slug} />
+              <p className="highlight">
+                <strong>Highlight — </strong>
+                {p.highlight}
+              </p>
               <div className="case-links">
                 <a className="btn btn-primary" href={`/work/${p.slug}`}>
                   Case study
@@ -173,11 +277,18 @@ CREATE TABLE post (
           <article className="job">
             <div className="job-top">
               <h3>Senior Software Engineer</h3>
-              <time>Sep 2025 – Present</time>
+              <time dateTime="2025-09">Sep 2025 – Present</time>
             </div>
             <p className="job-role">
               Capgemini · Enterprise warranty and service-order platform
             </p>
+            <div className="tech-row">
+              {["C#", ".NET", "SQL Server", "REST APIs"].map((t) => (
+                <span key={t} className="tech">
+                  {t}
+                </span>
+              ))}
+            </div>
             <ul>
               <li>
                 Developed and maintained partner-facing Create, Patch, and Get REST
@@ -193,19 +304,27 @@ CREATE TABLE post (
               </li>
             </ul>
             <div className="challenge">
-              <strong>Sanitized case:</strong> partner orders completed in the
-              backend but did not appear in the UI. Traced API → database →
-              interface flags, then fixed mapping/origin-code issues and timezone
-              windows so regional batches executed in the intended interval.
+              <strong>Sanitized case: </strong>
+              partner orders completed in the backend but did not appear in the UI.
+              Traced API → database → interface flags, then fixed mapping / origin-code
+              issues and timezone windows so regional batches executed in the intended
+              interval.
             </div>
           </article>
 
           <article className="job">
             <div className="job-top">
               <h3>AWS Solutions Architect Intern</h3>
-              <time>Aug 2023 – Nov 2023</time>
+              <time dateTime="2023-08">Aug 2023 – Nov 2023</time>
             </div>
             <p className="job-role">Codemithra</p>
+            <div className="tech-row">
+              {["AWS", "EC2", "S3", "IAM"].map((t) => (
+                <span key={t} className="tech">
+                  {t}
+                </span>
+              ))}
+            </div>
             <ul>
               <li>
                 Led design and AWS deployment of a skill-sharing platform on EC2,
@@ -217,6 +336,10 @@ CREATE TABLE post (
       </Chapter>
 
       <Chapter id="stack" num="03" title="Technical stack">
+        <p className="lead">
+          Backend-first specialization — technologies I can discuss in an interview
+          from real project and production work.
+        </p>
         <div className="skill-groups">
           <div className="skill-group">
             <h3>Backend engineering</h3>
@@ -225,7 +348,7 @@ CREATE TABLE post (
                 "C#",
                 "ASP.NET Core",
                 "ASP.NET Web API",
-                "REST",
+                "REST APIs",
                 "Entity Framework",
                 "LINQ",
                 "JWT",
@@ -304,7 +427,7 @@ CREATE TABLE post (
 
       <Chapter id="notes" num="04" title="Engineering notes">
         <p className="lead">
-          Short technical lessons from production and project work — not tutorial
+          Short lessons from production and agentic project work — not tutorial
           filler.
         </p>
         <div className="notes">
@@ -327,9 +450,9 @@ CREATE TABLE post (
           <article className="note">
             <h3>Agents that show their work</h3>
             <p>
-              For portfolio agent demos I keep a deterministic tool path (and a
-              visible trace) so reviewers can see quote → news → metrics or
-              security → performance → style without needing an API key.
+              Portfolio agent demos keep a deterministic tool path and a visible
+              trace so reviewers can follow quote → news → metrics or security →
+              performance → style without needing an API key.
             </p>
           </article>
         </div>
@@ -347,54 +470,58 @@ CREATE TABLE post (
           contracts, and practical trade-offs between reliability, performance,
           and maintainability.
         </p>
-        <p className="lead">
-          B.Tech CSE, VIT Chennai (2021–2025), CGPA 8.74/10. Certifications: AWS
-          SAA, AWS Cloud Practitioner, Azure AZ-900, Azure AI-900. Targeting
-          Software Engineer / .NET Backend / Full-Stack roles in Bengaluru, Delhi
-          NCR, or remote India.
-        </p>
 
-        <p className="hero-kicker" style={{ marginTop: "1.5rem" }}>
-          05 / Get in touch
-        </p>
-        <h3
-          style={{
-            margin: "0.4rem 0 0",
-            fontFamily: "var(--font-display)",
-            fontSize: "1.6rem",
-            letterSpacing: "-0.03em",
-          }}
-        >
-          Have a backend problem worth solving?
-        </h3>
-        <p className="lead">
-          Interested in roles where backend reliability, API design, and database
-          performance matter.
-        </p>
-        <div className="cta-row">
-          <a className="btn btn-primary" href="mailto:vagishsharma1234@gmail.com">
-            Email me ↗
-          </a>
-          <CopyEmail />
-          <a
-            className="btn"
-            href="https://github.com/VagishSharma01"
-            target="_blank"
-            rel="noreferrer"
-          >
-            GitHub ↗
-          </a>
-          <a
-            className="btn"
-            href="https://www.linkedin.com/in/vagish-sharma-531132283/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            LinkedIn ↗
-          </a>
-          <a className="btn" href="/Vagish_Sharma_Resume.pdf" download>
-            Résumé ↓
-          </a>
+        <div className="meta-grid">
+          <div className="meta-card">
+            <h3>Education</h3>
+            <p>B.Tech CSE · VIT Chennai (2021–2025) · CGPA 8.74/10</p>
+          </div>
+          <div className="meta-card">
+            <h3>Certifications</h3>
+            <p>AWS SAA · AWS Cloud Practitioner · Azure AZ-900 · Azure AI-900</p>
+          </div>
+          <div className="meta-card">
+            <h3>Location</h3>
+            <p>Bengaluru, India · open to Delhi NCR and remote India</p>
+          </div>
+          <div className="meta-card">
+            <h3>Targeting</h3>
+            <p>Software Engineer · .NET Backend · Full-Stack roles</p>
+          </div>
+        </div>
+
+        <div className="contact-block">
+          <p className="hero-kicker">05 / Get in touch</p>
+          <h3 className="contact-title">Have a backend problem worth solving?</h3>
+          <p className="lead">
+            Interested in roles where backend reliability, API design, and database
+            performance matter.
+          </p>
+          <div className="cta-row">
+            <a className="btn btn-primary" href="mailto:vagishsharma1234@gmail.com">
+              Email me ↗
+            </a>
+            <CopyEmail />
+            <a
+              className="btn"
+              href="https://github.com/VagishSharma01"
+              target="_blank"
+              rel="noreferrer"
+            >
+              GitHub ↗
+            </a>
+            <a
+              className="btn"
+              href="https://www.linkedin.com/in/vagish-sharma-531132283/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              LinkedIn ↗
+            </a>
+            <a className="btn" href="/Vagish_Sharma_Resume.pdf" download>
+              Résumé ↓
+            </a>
+          </div>
         </div>
 
         <footer className="site-footer">

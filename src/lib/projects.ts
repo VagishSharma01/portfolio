@@ -12,6 +12,7 @@ export type Project = {
   challenges: string[];
   evidence: string[];
   links: { label: string; href: string; external?: boolean }[];
+  highlight: string;
 };
 
 export const projects: Project[] = [
@@ -48,6 +49,7 @@ export const projects: Project[] = [
       "~30% lower service-order query latency after stored-procedure and indexing improvements (measured on the service-order query path during optimization work).",
       "50+ backend/integration defects resolved across API, SQL, and interface configuration.",
     ],
+    highlight: "~30% lower service-order query latency after stored-procedure and indexing work.",
     links: [
       { label: "Full case study", href: "/work/service-order-api" },
       { label: "Resume PDF", href: "/Vagish_Sharma_Resume.pdf" },
@@ -85,6 +87,7 @@ export const projects: Project[] = [
       "Public repo with sample_pr/, CLI, FastAPI UI, and live Vercel demo.",
       "Sample run surfaces critical eval() + hardcoded secret findings.",
     ],
+    highlight: "Deterministic specialist agents surface critical eval() and secret findings without an API key.",
     links: [
       { label: "Full case study", href: "/work/pr-review-agents" },
       {
@@ -130,6 +133,7 @@ export const projects: Project[] = [
       "Public repo + live demo at market-analyst-agent-smoky.vercel.app.",
       "Mock mode still hits live quote/news APIs.",
     ],
+    highlight: "Visible ReAct tool trace: quote → news → metrics → markdown briefing.",
     links: [
       { label: "Full case study", href: "/work/market-analyst-agent" },
       {
@@ -175,6 +179,7 @@ export const projects: Project[] = [
     evidence: [
       "Public repo + live demo; sample invoice extracts vendor, INV number, totals, line items.",
     ],
+    highlight: "Validates line-item sums against invoice total before persisting the run.",
     links: [
       { label: "Full case study", href: "/work/doc-intel-agent" },
       {
@@ -221,6 +226,7 @@ export const projects: Project[] = [
       "Documented on resume with stack .NET Core, ASP.NET Web API, SQL Server, React, JWT.",
       "Source not public — walkthrough available on request.",
     ],
+    highlight: "JWT + RBAC at the API layer with SQL-tuned availability search.",
     links: [
       { label: "Full case study", href: "/work/flight-booking" },
       {
@@ -258,6 +264,7 @@ export const projects: Project[] = [
     evidence: [
       "Public repository with schema.sql, queries, and ER diagram.",
     ],
+    highlight: "Normalized DDL with FKs, sample queries, and a public ER diagram.",
     links: [
       { label: "Full case study", href: "/work/sql-database" },
       {

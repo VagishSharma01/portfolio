@@ -39,6 +39,10 @@ export default async function WorkCaseStudy({
       <p className="lead" style={{ marginTop: "1rem" }}>
         {project.outcome}
       </p>
+      <p className="highlight" style={{ marginTop: "1rem" }}>
+        <strong>Highlight — </strong>
+        {project.highlight}
+      </p>
 
       <section>
         <h2>Overview</h2>

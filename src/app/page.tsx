@@ -8,7 +8,9 @@ export default function Home() {
       <MobileBar />
       <div className="layout">
         <Rail />
-        <Chapters />
+        <main id="main">
+          <Chapters />
+        </main>
       </div>
     </>
   );
