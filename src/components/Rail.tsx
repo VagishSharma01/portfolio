@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 
 const links = [
-  { href: "#hero", id: "hero", label: "Intro" },
-  { href: "#work", id: "work", label: "Projects" },
+  { href: "#hero", id: "hero", label: "Profile" },
+  { href: "#work", id: "work", label: "Selected work" },
   { href: "#experience", id: "experience", label: "Experience" },
-  { href: "#stack", id: "stack", label: "Skills" },
+  { href: "#stack", id: "stack", label: "Stack" },
+  { href: "#notes", id: "notes", label: "Notes" },
   { href: "#contact", id: "contact", label: "Contact" },
 ];
 
@@ -25,7 +26,7 @@ export function Rail() {
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (visible?.target?.id) setActive(visible.target.id);
       },
-      { rootMargin: "-20% 0px -55% 0px", threshold: [0.15, 0.4, 0.7] },
+      { rootMargin: "-18% 0px -55% 0px", threshold: [0.15, 0.45, 0.7] },
     );
 
     sections.forEach((s) => io.observe(s));
@@ -39,9 +40,9 @@ export function Rail() {
         <br />
         Sharma
       </div>
-      <div className="role">Software Engineer · Bengaluru</div>
+      <div className="role">Software Engineering</div>
       <p className="rail-blurb">
-        Production APIs, SQL performance, and cloud-connected backends.
+        Backend systems, REST APIs, SQL performance, cloud integrations.
       </p>
 
       <nav className="rail-nav" aria-label="Sections">
@@ -58,14 +59,14 @@ export function Rail() {
       </nav>
 
       <div className="rail-links">
-        <a className="link btn-primary" href="/Vagish_Sharma_Resume.pdf" download>
-          Resume
+        <a className="btn btn-primary" href="/Vagish_Sharma_Resume.pdf" download>
+          Résumé
         </a>
-        <a className="link" href="mailto:vagishsharma1234@gmail.com">
+        <a className="btn" href="mailto:vagishsharma1234@gmail.com">
           Email
         </a>
         <a
-          className="link"
+          className="btn"
           href="https://github.com/VagishSharma01"
           target="_blank"
           rel="noreferrer"
