@@ -10,13 +10,12 @@ export function Hero() {
     target: ref,
     offset: ["start start", "end start"],
   });
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "14%"]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.06]);
 
   return (
     <section id="top" ref={ref} className="relative">
-      {/* Full-bleed visual plane */}
-      <div className="relative h-[72svh] min-h-[520px] w-full overflow-hidden md:h-[86svh]">
+      <div className="relative min-h-[100svh] w-full overflow-hidden">
         <motion.div style={{ y, scale }} className="absolute inset-0">
           <Image
             src="/images/hero-atelier.jpg"
@@ -27,56 +26,61 @@ export function Hero() {
             className="object-cover object-center"
           />
         </motion.div>
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,18,20,0.18)_0%,rgba(16,18,20,0.05)_40%,rgba(243,244,246,0)_70%)]" />
-        <div className="absolute inset-x-0 bottom-0 h-28 bg-[linear-gradient(180deg,transparent,var(--paper))]" />
-      </div>
 
-      <div className="relative mx-auto max-w-[1400px] px-5 pb-16 pt-8 md:px-10 md:pb-24 md:pt-10">
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="eyebrow mb-6"
-        >
-          Backend Software Engineer · ~1 YOE
-        </motion.p>
+        {/* Atmospheric wash — keep photo dominant, text readable */}
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(16,18,20,0.28)_0%,rgba(16,18,20,0.12)_35%,rgba(16,18,20,0.55)_100%)]" />
 
-        <motion.h1
-          initial={{ opacity: 0, y: 28 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-          className="display max-w-[11ch] text-[clamp(4.2rem,13vw,9.5rem)] text-[var(--ink)]"
-        >
-          Vagish
-          <br />
-          Sharma
-        </motion.h1>
-
-        <div className="mt-10 grid gap-10 md:grid-cols-12 md:items-end">
+        <div className="relative mx-auto flex min-h-[100svh] max-w-[1400px] flex-col justify-end px-5 pb-14 pt-28 md:px-10 md:pb-20">
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.25, duration: 0.9 }}
-            className="max-w-xl text-[1.2rem] leading-[1.55] text-[var(--ink-soft)] md:col-span-7 md:text-[1.35rem]"
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            className="mb-5 font-[family-name:var(--font-mono)] text-[0.68rem] uppercase tracking-[0.2em] text-[rgba(243,244,246,0.78)]"
+          >
+            Backend Software Engineer · ~1 YOE
+          </motion.p>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 26 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.08, duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            className="display max-w-[11ch] text-[clamp(4.4rem,13vw,9.2rem)] text-[var(--paper)]"
+          >
+            Vagish
+            <br />
+            Sharma
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.22, duration: 0.85 }}
+            className="mt-7 max-w-xl text-[1.15rem] leading-relaxed text-[rgba(243,244,246,0.82)] md:text-[1.28rem]"
           >
             I build{" "}
-            <span className="serif text-[1.35em] text-[var(--ink)]">
+            <span className="serif text-[1.25em] text-[var(--paper)]">
               C# / .NET REST APIs
             </span>{" "}
-            and SQL Server systems for enterprise platforms — contracts that stay
-            clear, queries that stay fast, integrations that stay honest.
+            and SQL Server systems — clear contracts, fast queries, reliable
+            integrations.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4, duration: 0.8 }}
-            className="flex flex-wrap gap-3 md:col-span-5 md:justify-end"
+            transition={{ delay: 0.35, duration: 0.8 }}
+            className="mt-9 flex flex-wrap gap-3"
           >
-            <a className="btn btn-primary" href="mailto:vagishsharma1234@gmail.com">
+            <a
+              href="mailto:vagishsharma1234@gmail.com"
+              className="inline-flex items-center border border-[var(--paper)] bg-[var(--paper)] px-5 py-4 font-[family-name:var(--font-mono)] text-[0.72rem] uppercase tracking-[0.14em] text-[var(--ink)] transition hover:bg-transparent hover:text-[var(--paper)]"
+            >
               Inquire
             </a>
-            <a className="btn btn-ghost" href="#work">
+            <a
+              href="#work"
+              className="inline-flex items-center border border-[rgba(243,244,246,0.55)] px-5 py-4 font-[family-name:var(--font-mono)] text-[0.72rem] uppercase tracking-[0.14em] text-[var(--paper)] transition hover:border-[var(--paper)]"
+            >
               Selected work
             </a>
           </motion.div>
@@ -85,26 +89,20 @@ export function Hero() {
 
       <div className="marquee" aria-hidden>
         <div className="marquee-track">
-          {[
-            "C#",
-            ".NET Core",
-            "SQL Server",
-            "Azure",
-            "REST APIs",
-            "AWS",
-            "System Design",
-            "Integrations",
-            "C#",
-            ".NET Core",
-            "SQL Server",
-            "Azure",
-            "REST APIs",
-            "AWS",
-            "System Design",
-            "Integrations",
-          ].map((t, i) => (
-            <span key={`${t}-${i}`}>{t}</span>
-          ))}
+          {Array.from({ length: 2 }).flatMap((_, pass) =>
+            [
+              "C#",
+              ".NET Core",
+              "SQL Server",
+              "Azure",
+              "REST APIs",
+              "AWS",
+              "System Design",
+              "Integrations",
+            ].map((t) => (
+              <span key={`${pass}-${t}`}>{t}</span>
+            )),
+          )}
         </div>
       </div>
     </section>
