@@ -5,7 +5,18 @@ import { projects } from "@/lib/projects";
 import { CopyEmail } from "@/components/CopyEmail";
 import { CountUp } from "@/components/CountUp";
 import { RequestFlow } from "@/components/RequestFlow";
-import { easeOut, sectionReveal, springSoft } from "@/lib/motion";
+import { TextReveal } from "@/components/TextReveal";
+import {
+  cardHover,
+  easeExpo,
+  easeOut,
+  fadeUpSoft,
+  sectionReveal,
+  springSoft,
+  staggerContainer,
+  staggerFast,
+  tapScale,
+} from "@/lib/motion";
 
 function Chapter({
   id,
@@ -33,44 +44,19 @@ function Chapter({
           })}
     >
       <div className="chapter-head">
-        <h2>{title}</h2>
-        <span className="chapter-num">{num}</span>
+        <TextReveal text={title} as="h2" inView delay={0.04} />
+        <motion.span
+          className="chapter-num"
+          initial={reduce ? false : { opacity: 0, x: 8 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2, ease: easeOut }}
+        >
+          {num}
+        </motion.span>
       </div>
       {children}
     </motion.section>
-  );
-}
-
-function HeroLine({
-  text,
-  delay = 0,
-  as: Tag = "span",
-  className,
-}: {
-  text: string;
-  delay?: number;
-  as?: "span" | "h1";
-  className?: string;
-}) {
-  const reduce = useReducedMotion();
-  if (reduce) {
-    return Tag === "h1" ? (
-      <h1 className={className}>{text}</h1>
-    ) : (
-      <span className={className}>{text}</span>
-    );
-  }
-  return (
-    <Tag className={`hero-line ${className ?? ""}`.trim()}>
-      <motion.span
-        className="hero-line-inner"
-        initial={{ y: "110%" }}
-        animate={{ y: "0%" }}
-        transition={{ ...springSoft, delay }}
-      >
-        {text}
-      </motion.span>
-    </Tag>
   );
 }
 
@@ -94,16 +80,20 @@ function AgentFlowDiagram({
           return (
             <motion.g
               key={s}
-              initial={reduce ? false : { opacity: 0, y: 6 }}
+              initial={reduce ? false : { opacity: 0, y: 8 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.35, delay: 0.05 + i * 0.06 }}
+              transition={{ duration: 0.4, delay: 0.06 + i * 0.07, ease: easeExpo }}
             >
               {i > 0 ? (
-                <path
+                <motion.path
                   d={`M${x - gap} 60 H${x}`}
                   stroke="#ffffff"
                   strokeWidth="1.25"
+                  initial={reduce ? false : { pathLength: 0 }}
+                  whileInView={{ pathLength: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.35, delay: 0.1 + i * 0.07 }}
                 />
               ) : null}
               <rect
@@ -197,35 +187,45 @@ export function Chapters() {
         aria-labelledby="hero-title"
         initial={reduce ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.35 }}
+        transition={{ duration: 0.4 }}
       >
         <motion.p
           className="hero-kicker"
-          initial={reduce ? false : { opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.05, ease: easeOut }}
+          initial={reduce ? false : { opacity: 0, y: 10, filter: "blur(4px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.5, delay: 0.05, ease: easeExpo }}
         >
           Vagish Sharma / Software Engineering · 00 — Profile
         </motion.p>
 
         <h1 id="hero-title" className="hero-title">
-          <HeroLine text="I build backend systems" delay={0.12} className="hero-title-line" />
-          <HeroLine text="that work in production." delay={0.22} className="hero-title-line" />
+          <TextReveal
+            text="I build backend systems"
+            as="span"
+            className="hero-title-line"
+            delay={0.14}
+          />
+          <TextReveal
+            text="that work in production."
+            as="span"
+            className="hero-title-line"
+            delay={0.42}
+          />
         </h1>
 
         <motion.p
           className="hero-stack"
-          initial={reduce ? false : { opacity: 0, y: 10 }}
+          initial={reduce ? false : { opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45, delay: 0.38, ease: easeOut }}
+          transition={{ duration: 0.5, delay: 0.72, ease: easeExpo }}
         >
           C# / .NET / REST APIs / SQL SERVER / AZURE
         </motion.p>
         <motion.p
           className="lead"
-          initial={reduce ? false : { opacity: 0, y: 12 }}
+          initial={reduce ? false : { opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.48, ease: easeOut }}
+          transition={{ duration: 0.55, delay: 0.82, ease: easeExpo }}
         >
           Software engineer focused on reliable APIs, database performance, and
           enterprise integrations. I build and troubleshoot backend workflows,
@@ -234,15 +234,15 @@ export function Chapters() {
         </motion.p>
         <motion.div
           className="cta-row"
-          initial={reduce ? false : { opacity: 0, y: 14 }}
+          initial={reduce ? false : { opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ ...springSoft, delay: 0.58 }}
+          transition={{ ...springSoft, delay: 0.94 }}
         >
           <motion.a
             className="btn btn-primary"
             href="#work"
             whileHover={reduce ? undefined : { y: -2 }}
-            whileTap={reduce ? undefined : { scale: 0.98 }}
+            whileTap={reduce ? undefined : tapScale}
           >
             Explore selected work ↗
           </motion.a>
@@ -251,7 +251,7 @@ export function Chapters() {
             href="/Vagish_Sharma_Resume.pdf"
             download
             whileHover={reduce ? undefined : { y: -2 }}
-            whileTap={reduce ? undefined : { scale: 0.98 }}
+            whileTap={reduce ? undefined : tapScale}
           >
             Download résumé ↓
           </motion.a>
@@ -259,27 +259,42 @@ export function Chapters() {
         <motion.div
           className="proof"
           aria-label="Proof points"
-          initial={reduce ? false : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.72, ease: easeOut }}
+          initial={reduce ? false : "hidden"}
+          animate="show"
+          variants={reduce ? undefined : staggerContainer}
         >
-          <div className="proof-item">
-            <strong>
-              <CountUp value={50} suffix="+" />
-            </strong>
-            <span>Backend / integration defects resolved</span>
-          </div>
-          <div className="proof-item">
-            <strong>
-              ~
-              <CountUp value={30} suffix="%" />
-            </strong>
-            <span>Service-order query latency reduction</span>
-          </div>
-          <div className="proof-item">
-            <strong>.NET</strong>
-            <span>Core engineering specialization</span>
-          </div>
+          {[
+            {
+              value: (
+                <>
+                  <CountUp value={50} suffix="+" />
+                </>
+              ),
+              label: "Backend / integration defects resolved",
+            },
+            {
+              value: (
+                <>
+                  ~
+                  <CountUp value={30} suffix="%" />
+                </>
+              ),
+              label: "Service-order query latency reduction",
+            },
+            {
+              value: ".NET",
+              label: "Core engineering specialization",
+            },
+          ].map((item) => (
+            <motion.div
+              key={item.label}
+              className="proof-item"
+              variants={reduce ? undefined : fadeUpSoft}
+            >
+              <strong>{item.value}</strong>
+              <span>{item.label}</span>
+            </motion.div>
+          ))}
         </motion.div>
       </motion.section>
 
@@ -288,23 +303,19 @@ export function Chapters() {
           Evidence-driven projects — production backend work, public agent demos,
           and SQL engineering. Open a case study for architecture and decisions.
         </p>
-        <div className="projects">
-          {projects.map((p, index) => (
+        <motion.div
+          className="projects"
+          initial={reduce ? false : "hidden"}
+          whileInView="show"
+          viewport={{ once: true, amount: 0.08 }}
+          variants={reduce ? undefined : staggerContainer}
+        >
+          {projects.map((p) => (
             <motion.article
               key={p.slug}
               className="case"
-              initial={reduce ? false : { opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.18 }}
-              transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.2), ease: easeOut }}
-              whileHover={
-                reduce
-                  ? undefined
-                  : {
-                      y: -3,
-                      transition: { type: "spring", stiffness: 380, damping: 28 },
-                    }
-              }
+              variants={reduce ? undefined : fadeUpSoft}
+              whileHover={reduce ? undefined : cardHover}
             >
               <div className="case-top">
                 <h3>
@@ -332,7 +343,8 @@ export function Chapters() {
                 <motion.a
                   className="btn btn-primary btn-arrow"
                   href={`/work/${p.slug}`}
-                  whileHover={reduce ? undefined : { x: 2 }}
+                  whileHover={reduce ? undefined : { x: 3 }}
+                  transition={springSoft}
                 >
                   Case study
                   <span aria-hidden>↗</span>
@@ -357,12 +369,18 @@ export function Chapters() {
               </div>
             </motion.article>
           ))}
-        </div>
+        </motion.div>
       </Chapter>
 
       <Chapter id="experience" num="02" title="Experience">
-        <div className="timeline">
-          <article className="job">
+        <motion.div
+          className="timeline"
+          initial={reduce ? false : "hidden"}
+          whileInView="show"
+          viewport={{ once: true, amount: 0.12 }}
+          variants={reduce ? undefined : staggerContainer}
+        >
+          <motion.article className="job" variants={reduce ? undefined : fadeUpSoft}>
             <div className="job-top">
               <h3>Senior Software Engineer</h3>
               <time dateTime="2025-09">Sep 2025 – Present</time>
@@ -398,9 +416,9 @@ export function Chapters() {
               issues and timezone windows so regional batches executed in the intended
               interval.
             </div>
-          </article>
+          </motion.article>
 
-          <article className="job">
+          <motion.article className="job" variants={reduce ? undefined : fadeUpSoft}>
             <div className="job-top">
               <h3>AWS Solutions Architect Intern</h3>
               <time dateTime="2023-08">Aug 2023 – Nov 2023</time>
@@ -419,8 +437,8 @@ export function Chapters() {
                 S3, and IAM — architecture, access control, and launch.
               </li>
             </ul>
-          </article>
-        </div>
+          </motion.article>
+        </motion.div>
       </Chapter>
 
       <Chapter id="stack" num="03" title="Technical stack">
@@ -428,89 +446,89 @@ export function Chapters() {
           Backend-first specialization — technologies I can discuss in an interview
           from real project and production work.
         </p>
-        <div className="skill-groups">
-          <div className="skill-group">
-            <h3>Backend engineering</h3>
-            <div className="skills">
-              {[
-                "C#",
-                "ASP.NET Core",
-                "ASP.NET Web API",
-                "REST APIs",
-                "Entity Framework",
-                "LINQ",
-                "JWT",
-              ].map((s) => (
-                <span key={s} className="skill">
-                  {s}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="skill-group">
-            <h3>Databases</h3>
-            <div className="skills">
-              {[
-                "SQL Server",
-                "T-SQL",
-                "Stored Procedures",
-                "Indexing",
-                "Query Optimization",
-                "Data Modeling",
-              ].map((s) => (
-                <span key={s} className="skill">
-                  {s}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="skill-group">
-            <h3>Cloud & AI</h3>
-            <div className="skills">
-              {[
-                "Azure",
-                "AWS",
-                "Azure OpenAI",
-                "Python agents",
-                "FastAPI",
-                "EC2",
-                "S3",
-                "IAM",
-              ].map((s) => (
-                <span key={s} className="skill">
-                  {s}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="skill-group">
-            <h3>Frontend</h3>
-            <div className="skills">
-              {["Angular", "TypeScript", "React", "HTML", "CSS"].map((s) => (
-                <span key={s} className="skill">
-                  {s}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="skill-group">
-            <h3>Engineering tools</h3>
-            <div className="skills">
-              {[
-                "Git",
-                "GitHub",
-                "Postman",
-                "Swagger",
-                "Unit Testing",
-                "CI/CD",
-              ].map((s) => (
-                <span key={s} className="skill">
-                  {s}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
+        <motion.div
+          className="skill-groups"
+          initial={reduce ? false : "hidden"}
+          whileInView="show"
+          viewport={{ once: true, amount: 0.15 }}
+          variants={reduce ? undefined : staggerFast}
+        >
+          {(
+            [
+              {
+                title: "Backend engineering",
+                items: [
+                  "C#",
+                  "ASP.NET Core",
+                  "ASP.NET Web API",
+                  "REST APIs",
+                  "Entity Framework",
+                  "LINQ",
+                  "JWT",
+                ],
+              },
+              {
+                title: "Databases",
+                items: [
+                  "SQL Server",
+                  "T-SQL",
+                  "Stored Procedures",
+                  "Indexing",
+                  "Query Optimization",
+                  "Data Modeling",
+                ],
+              },
+              {
+                title: "Cloud & AI",
+                items: [
+                  "Azure",
+                  "AWS",
+                  "Azure OpenAI",
+                  "Python agents",
+                  "FastAPI",
+                  "EC2",
+                  "S3",
+                  "IAM",
+                ],
+              },
+              {
+                title: "Frontend",
+                items: ["Angular", "TypeScript", "React", "HTML", "CSS"],
+              },
+              {
+                title: "Engineering tools",
+                items: [
+                  "Git",
+                  "GitHub",
+                  "Postman",
+                  "Swagger",
+                  "Unit Testing",
+                  "CI/CD",
+                ],
+              },
+            ] as const
+          ).map((group) => (
+            <motion.div
+              key={group.title}
+              className="skill-group"
+              variants={reduce ? undefined : fadeUpSoft}
+            >
+              <h3>{group.title}</h3>
+              <div className="skills">
+                {group.items.map((s) => (
+                  <motion.span
+                    key={s}
+                    className="skill"
+                    whileHover={reduce ? undefined : { y: -2, borderColor: "#ffffff" }}
+                    transition={springSoft}
+                  >
+                    {s}
+                  </motion.span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
       </Chapter>
 
       <Chapter id="notes" num="04" title="Engineering notes">
@@ -518,32 +536,41 @@ export function Chapters() {
           Short lessons from production and agentic project work — not tutorial
           filler.
         </p>
-        <div className="notes">
-          <article className="note">
-            <h3>When the API says success but the UI is empty</h3>
-            <p>
-              Trace the full path: request payload → mapping → stored procedure →
-              interface flags. A “successful” write that never surfaces usually
-              means the processing path diverged after the API returned 200.
-            </p>
-          </article>
-          <article className="note">
-            <h3>Latency wins from boring SQL</h3>
-            <p>
-              The ~30% service-order read improvement came from indexing and
-              procedure shape — not a new cache layer. Measure the hot query,
-              fix the plan, then re-check the same path.
-            </p>
-          </article>
-          <article className="note">
-            <h3>Agents that show their work</h3>
-            <p>
-              Portfolio agent demos keep a deterministic tool path and a visible
-              trace so reviewers can follow quote → news → metrics or security →
-              performance → style without needing an API key.
-            </p>
-          </article>
-        </div>
+        <motion.div
+          className="notes"
+          initial={reduce ? false : "hidden"}
+          whileInView="show"
+          viewport={{ once: true, amount: 0.15 }}
+          variants={reduce ? undefined : staggerContainer}
+        >
+          {(
+            [
+              {
+                title: "When the API says success but the UI is empty",
+                body: "Trace the full path: request payload → mapping → stored procedure → interface flags. A “successful” write that never surfaces usually means the processing path diverged after the API returned 200.",
+              },
+              {
+                title: "Latency wins from boring SQL",
+                body: "The ~30% service-order read improvement came from indexing and procedure shape — not a new cache layer. Measure the hot query, fix the plan, then re-check the same path.",
+              },
+              {
+                title: "Agents that show their work",
+                body: "Portfolio agent demos keep a deterministic tool path and a visible trace so reviewers can follow quote → news → metrics or security → performance → style without needing an API key.",
+              },
+            ] as const
+          ).map((n) => (
+            <motion.article
+              key={n.title}
+              className="note"
+              variants={reduce ? undefined : fadeUpSoft}
+              whileHover={reduce ? undefined : { y: -2, borderColor: "#ffffff" }}
+              transition={springSoft}
+            >
+              <h3>{n.title}</h3>
+              <p>{n.body}</p>
+            </motion.article>
+          ))}
+        </motion.div>
       </Chapter>
 
       <Chapter id="contact" num="05" title="About & contact">
@@ -559,28 +586,55 @@ export function Chapters() {
           and maintainability.
         </p>
 
-        <div className="meta-grid">
-          <div className="meta-card">
-            <h3>Education</h3>
-            <p>B.Tech CSE · VIT Chennai (2021–2025) · CGPA 8.74/10</p>
-          </div>
-          <div className="meta-card">
-            <h3>Certifications</h3>
-            <p>AWS SAA · AWS Cloud Practitioner · Azure AZ-900 · Azure AI-900</p>
-          </div>
-          <div className="meta-card">
-            <h3>Location</h3>
-            <p>Bengaluru, India · open to Delhi NCR and remote India</p>
-          </div>
-          <div className="meta-card">
-            <h3>Targeting</h3>
-            <p>Software Engineer · .NET Backend · Full-Stack roles</p>
-          </div>
-        </div>
+        <motion.div
+          className="meta-grid"
+          initial={reduce ? false : "hidden"}
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={reduce ? undefined : staggerFast}
+        >
+          {(
+            [
+              {
+                title: "Education",
+                body: "B.Tech CSE · VIT Chennai (2021–2025) · CGPA 8.74/10",
+              },
+              {
+                title: "Certifications",
+                body: "AWS SAA · AWS Cloud Practitioner · Azure AZ-900 · Azure AI-900",
+              },
+              {
+                title: "Location",
+                body: "Bengaluru, India · open to Delhi NCR and remote India",
+              },
+              {
+                title: "Targeting",
+                body: "Software Engineer · .NET Backend · Full-Stack roles",
+              },
+            ] as const
+          ).map((m) => (
+            <motion.div
+              key={m.title}
+              className="meta-card"
+              variants={reduce ? undefined : fadeUpSoft}
+              whileHover={reduce ? undefined : { y: -2, borderColor: "#a3a3a3" }}
+              transition={springSoft}
+            >
+              <h3>{m.title}</h3>
+              <p>{m.body}</p>
+            </motion.div>
+          ))}
+        </motion.div>
 
         <div className="contact-block">
           <p className="hero-kicker">05 / Get in touch</p>
-          <h3 className="contact-title">Have a backend problem worth solving?</h3>
+          <TextReveal
+            text="Have a backend problem worth solving?"
+            as="h3"
+            className="contact-title"
+            inView
+            delay={0.06}
+          />
           <p className="lead">
             Interested in roles where backend reliability, API design, and database
             performance matter.
@@ -590,7 +644,7 @@ export function Chapters() {
               className="btn btn-primary"
               href="mailto:vagishsharma1234@gmail.com"
               whileHover={reduce ? undefined : { y: -2 }}
-              whileTap={reduce ? undefined : { scale: 0.98 }}
+              whileTap={reduce ? undefined : tapScale}
             >
               Email me ↗
             </motion.a>

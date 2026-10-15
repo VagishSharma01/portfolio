@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
+import { Providers } from "@/components/Providers";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { ScrollTextures } from "@/components/ScrollTextures";
 
@@ -54,10 +55,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <a className="skip-link" href="#main">
           Skip to main content
         </a>
-        <SmoothScroll>
-          <ScrollTextures />
-          <div className="shell">{children}</div>
-        </SmoothScroll>
+        <Providers>
+          <SmoothScroll>
+            <ScrollTextures />
+            <div className="shell">{children}</div>
+          </SmoothScroll>
+        </Providers>
       </body>
     </html>
   );

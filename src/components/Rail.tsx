@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { springSnappy } from "@/lib/motion";
+import { easeExpo, springSnappy, springSoft, tapScale } from "@/lib/motion";
 
 const links = [
   { href: "#hero", id: "hero", label: "Profile", num: "00" },
@@ -38,25 +38,46 @@ export function Rail() {
 
   return (
     <aside className="rail" aria-label="Site">
-      <div className="brand">
+      <motion.div
+        className="brand"
+        initial={reduce ? false : { opacity: 0, y: 12, filter: "blur(4px)" }}
+        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+        transition={{ duration: 0.65, ease: easeExpo }}
+      >
         Vagish
         <br />
         Sharma
-      </div>
-      <div className="role">Software Engineering</div>
-      <p className="rail-blurb">
+      </motion.div>
+      <motion.div
+        className="role"
+        initial={reduce ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.2, duration: 0.45 }}
+      >
+        Software Engineering
+      </motion.div>
+      <motion.p
+        className="rail-blurb"
+        initial={reduce ? false : { opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.28, duration: 0.5, ease: easeExpo }}
+      >
         Backend systems, REST APIs, SQL performance, cloud integrations.
-      </p>
+      </motion.p>
 
       <nav className="rail-nav" aria-label="Sections">
-        {links.map((l) => {
+        {links.map((l, i) => {
           const isActive = active === l.id;
           return (
-            <a
+            <motion.a
               key={l.id}
               href={l.href}
               className={isActive ? "active" : undefined}
               aria-current={isActive ? "true" : undefined}
+              initial={reduce ? false : { opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.32 + i * 0.04, duration: 0.4, ease: easeExpo }}
+              whileHover={reduce ? undefined : { x: 2 }}
             >
               <span className="num" aria-hidden>
                 {l.num}
@@ -73,18 +94,24 @@ export function Rail() {
                 )}
               </span>
               {l.label}
-            </a>
+            </motion.a>
           );
         })}
       </nav>
 
-      <div className="rail-links">
+      <motion.div
+        className="rail-links"
+        initial={reduce ? false : { opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.55, duration: 0.45, ease: easeExpo }}
+      >
         <motion.a
           className="btn btn-primary"
           href="/Vagish_Sharma_Resume.pdf"
           download
           whileHover={reduce ? undefined : { y: -1 }}
-          whileTap={reduce ? undefined : { scale: 0.98 }}
+          whileTap={reduce ? undefined : tapScale}
+          transition={springSoft}
         >
           Résumé
         </motion.a>
@@ -107,7 +134,7 @@ export function Rail() {
         >
           LinkedIn
         </a>
-      </div>
+      </motion.div>
     </aside>
   );
 }

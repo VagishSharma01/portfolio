@@ -514,11 +514,13 @@ a {
   border-radius: var(--radius);
   background: var(--panel-2);
   padding: 1.2rem 1.2rem 1.3rem;
-  transition: border-color 0.18s ease, transform 0.18s ease;
+  transition: border-color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .case:hover {
-  border-color: #ffffff;
+  border-color: #3a3a3a;
+  background: #121212;
 }
 
 .case-top {
@@ -913,12 +915,36 @@ a {
 
 
 
-/* —— Motion: hero line reveal —— */
+/* —— Motion: hero + text reveal —— */
 .hero-title {
   display: flex;
   flex-direction: column;
-  gap: 0.08em;
+  gap: 0.12em;
   max-width: 14ch;
+}
+
+.hero-title-line {
+  display: block;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: 1.05;
+}
+
+.text-reveal {
+  display: inline;
+}
+
+.text-reveal-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+.text-reveal-inner {
+  display: inline-block;
+  will-change: transform;
 }
 
 .hero-line {
@@ -932,9 +958,15 @@ a {
   will-change: transform;
 }
 
-.hero-title-line {
-  font: inherit;
-  letter-spacing: inherit;
+.skill {
+  transition: border-color 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.note,
+.meta-card,
+.job {
+  transition: border-color 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* —— Motion: rail tick —— */
@@ -980,7 +1012,7 @@ a {
 
 .case:hover .case-preview-wrap .diagram,
 .case:hover .case-preview-wrap .code-panel {
-  transform: scale(1.03);
+  transform: scale(1.035) translateY(-2px);
 }
 
 .btn-arrow span {
