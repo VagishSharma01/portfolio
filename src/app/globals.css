@@ -407,7 +407,7 @@ a {
   gap: 1rem;
   margin-bottom: 1.1rem;
   padding-bottom: 0.85rem;
-  border-bottom: 1px solid rgba(41, 49, 59, 0.85);
+  border-bottom: 1px solid rgba(41, 41, 41, 0.9);
 }
 
 .chapter-head h2 {
