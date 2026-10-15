@@ -11,6 +11,8 @@ type Props = {
   mode?: "words" | "lines";
   /** When true, reveal on scroll into view instead of mount. */
   inView?: boolean;
+  /** Gate mount animations (e.g. wait for intro veil). Default true. */
+  active?: boolean;
 };
 
 /** Clip-path style word/line reveal for cinematic entrances. */
@@ -21,6 +23,7 @@ export function TextReveal({
   delay = 0,
   mode = "words",
   inView = false,
+  active = true,
 }: Props) {
   const reduce = useReducedMotion();
   const parts =
@@ -33,6 +36,7 @@ export function TextReveal({
   }
 
   const label = text.replace(/\n/g, " ");
+  const show = inView ? undefined : active ? "show" : "hidden";
 
   return (
     <Tag className={className}>
@@ -44,12 +48,12 @@ export function TextReveal({
               whileInView: "show",
               viewport: { once: true, amount: 0.35 },
             }
-          : { animate: "show" })}
+          : { animate: show })}
         variants={{
           hidden: {},
           show: {
             transition: {
-              staggerChildren: mode === "words" ? 0.048 : 0.14,
+              staggerChildren: mode === "words" ? 0.052 : 0.14,
               delayChildren: delay,
             },
           },

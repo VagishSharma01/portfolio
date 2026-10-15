@@ -21,7 +21,7 @@
   --read: 68ch;
   --radius: 3px;
   --pad: 1.75rem;
-  --section-gap: 4.5rem;
+  --section-gap: 5.25rem;
   --header-h: 3.5rem;
 }
 
@@ -413,9 +413,9 @@ a {
 .chapter-head h2 {
   margin: 0;
   font-family: var(--font-display), system-ui, sans-serif;
-  font-size: clamp(28px, 3.5vw, 38px);
-  letter-spacing: -0.035em;
-  line-height: 1.12;
+  font-size: clamp(30px, 4vw, 44px);
+  letter-spacing: -0.04em;
+  line-height: 1.1;
 }
 
 .chapter-num {
@@ -439,10 +439,15 @@ a {
   margin: 0;
   font-family: var(--font-display), system-ui, sans-serif;
   font-weight: 700;
-  font-size: clamp(36px, 5.8vw, 64px);
-  letter-spacing: -0.048em;
-  line-height: 1.04;
-  max-width: 13ch;
+  font-size: clamp(40px, 7vw, 76px);
+  letter-spacing: -0.052em;
+  line-height: 1.02;
+  max-width: 12ch;
+}
+
+.chapter-hero {
+  padding-top: clamp(2.2rem, 4vw, 3.2rem);
+  padding-bottom: clamp(2.2rem, 4vw, 3.2rem);
 }
 
 .hero-stack {
@@ -505,8 +510,19 @@ a {
 /* —— Projects —— */
 .projects {
   display: grid;
-  gap: 1.25rem;
-  margin-top: 1.25rem;
+  gap: 1.75rem;
+  margin-top: 1.5rem;
+}
+
+.case-index {
+  display: inline-block;
+  margin-right: 0.55rem;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--meta);
+  vertical-align: middle;
 }
 
 .case {
@@ -998,21 +1014,55 @@ a {
 
 /* —— Motion: project preview —— */
 .case-preview-wrap {
-  margin-top: 0.95rem;
+  margin-top: 1.15rem;
   overflow: hidden;
   border-radius: var(--radius);
+  border: 1px solid rgba(41, 41, 41, 0.85);
+  background: #0a0a0a;
 }
 
 .case-preview-wrap .diagram,
 .case-preview-wrap .code-panel {
   margin-top: 0;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
   transform-origin: center;
 }
 
 .case:hover .case-preview-wrap .diagram,
 .case:hover .case-preview-wrap .code-panel {
-  transform: scale(1.035) translateY(-2px);
+  transform: scale(1.06) translateY(-3px);
+}
+
+/* —— Intro veil (Huyml-style black hold) —— */
+.intro-veil {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: #050505;
+  pointer-events: none;
+}
+
+.intro-mark {
+  font-family: var(--font-display), system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.4rem, 3vw, 1.85rem);
+  letter-spacing: -0.04em;
+  color: #ffffff;
+}
+
+/* —— Route wipe —— */
+.route-shell {
+  position: relative;
+}
+
+.page-wipe {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: #050505;
+  pointer-events: none;
 }
 
 .btn-arrow span {

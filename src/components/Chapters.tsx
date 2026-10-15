@@ -5,6 +5,7 @@ import { projects } from "@/lib/projects";
 import { CopyEmail } from "@/components/CopyEmail";
 import { CountUp } from "@/components/CountUp";
 import { RequestFlow } from "@/components/RequestFlow";
+import { useIntroReady } from "@/components/Intro";
 import { TextReveal } from "@/components/TextReveal";
 import {
   cardHover,
@@ -178,22 +179,28 @@ CREATE TABLE post (
 
 export function Chapters() {
   const reduce = useReducedMotion();
+  const introReady = useIntroReady();
+  const go = reduce || introReady;
 
   return (
     <div>
       <motion.section
         id="hero"
-        className="chapter"
+        className="chapter chapter-hero"
         aria-labelledby="hero-title"
         initial={reduce ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.4 }}
+        animate={{ opacity: go ? 1 : 0 }}
+        transition={{ duration: 0.5, ease: easeExpo }}
       >
         <motion.p
           className="hero-kicker"
           initial={reduce ? false : { opacity: 0, y: 10, filter: "blur(4px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 0.5, delay: 0.05, ease: easeExpo }}
+          animate={
+            go
+              ? { opacity: 1, y: 0, filter: "blur(0px)" }
+              : { opacity: 0, y: 10, filter: "blur(4px)" }
+          }
+          transition={{ duration: 0.65, delay: go ? 0.05 : 0, ease: easeExpo }}
         >
           Vagish Sharma / Software Engineering · 00 — Profile
         </motion.p>
@@ -203,29 +210,31 @@ export function Chapters() {
             text="I build backend systems"
             as="span"
             className="hero-title-line"
-            delay={0.14}
+            delay={0.12}
+            active={go}
           />
           <TextReveal
             text="that work in production."
             as="span"
             className="hero-title-line"
-            delay={0.42}
+            delay={0.48}
+            active={go}
           />
         </h1>
 
         <motion.p
           className="hero-stack"
           initial={reduce ? false : { opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.72, ease: easeExpo }}
+          animate={go ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
+          transition={{ duration: 0.6, delay: go ? 0.85 : 0, ease: easeExpo }}
         >
           C# / .NET / REST APIs / SQL SERVER / AZURE
         </motion.p>
         <motion.p
           className="lead"
           initial={reduce ? false : { opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.55, delay: 0.82, ease: easeExpo }}
+          animate={go ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
+          transition={{ duration: 0.65, delay: go ? 0.98 : 0, ease: easeExpo }}
         >
           Software engineer focused on reliable APIs, database performance, and
           enterprise integrations. I build and troubleshoot backend workflows,
@@ -235,8 +244,8 @@ export function Chapters() {
         <motion.div
           className="cta-row"
           initial={reduce ? false : { opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...springSoft, delay: 0.94 }}
+          animate={go ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+          transition={{ ...springSoft, delay: go ? 1.1 : 0 }}
         >
           <motion.a
             className="btn btn-primary"
@@ -260,7 +269,7 @@ export function Chapters() {
           className="proof"
           aria-label="Proof points"
           initial={reduce ? false : "hidden"}
-          animate="show"
+          animate={go ? "show" : "hidden"}
           variants={reduce ? undefined : staggerContainer}
         >
           {[
@@ -310,7 +319,7 @@ export function Chapters() {
           viewport={{ once: true, amount: 0.08 }}
           variants={reduce ? undefined : staggerContainer}
         >
-          {projects.map((p) => (
+          {projects.map((p, index) => (
             <motion.article
               key={p.slug}
               className="case"
@@ -319,6 +328,9 @@ export function Chapters() {
             >
               <div className="case-top">
                 <h3>
+                  <span className="case-index" aria-hidden>
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
                   {p.title}
                   {p.featured ? <span className="case-badge">Featured</span> : null}
                 </h3>
