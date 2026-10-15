@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useInView, useReducedMotion } from "motion/react";
 
 type Props = {
@@ -21,34 +21,43 @@ export function CountUp({
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, amount: 0.6 });
   const reduce = useReducedMotion();
-  const [display, setDisplay] = useState(reduce ? value : 0);
 
   useEffect(() => {
-    if (!inView) return;
+    const el = ref.current;
+    if (!el || !inView) return;
+
+    const format = (n: number) => {
+      const formatted =
+        decimals > 0 ? n.toFixed(decimals) : Math.round(n).toString();
+      el.textContent = `${prefix}${formatted}${suffix}`;
+    };
+
     if (reduce) {
-      setDisplay(value);
+      format(value);
       return;
     }
+
     const start = performance.now();
     const duration = 1100;
     let frame = 0;
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / duration);
       const eased = 1 - Math.pow(1 - t, 3);
-      setDisplay(value * eased);
+      format(value * eased);
       if (t < 1) frame = requestAnimationFrame(tick);
     };
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [inView, reduce, value]);
+  }, [inView, reduce, value, prefix, suffix, decimals]);
 
-  const formatted =
-    decimals > 0 ? display.toFixed(decimals) : Math.round(display).toString();
+  // SSR / initial paint
+  const initial =
+    decimals > 0 ? value.toFixed(decimals) : Math.round(reduce ? value : 0).toString();
 
   return (
     <span ref={ref} className={className}>
       {prefix}
-      {formatted}
+      {reduce ? (decimals > 0 ? value.toFixed(decimals) : value) : initial}
       {suffix}
     </span>
   );
