@@ -37,28 +37,28 @@ function ApiDiagram() {
   return (
     <div className="diagram" role="img" aria-label="Partner clients to .NET REST API to SQL Server">
       <svg viewBox="0 0 640 200">
-        <rect width="640" height="200" fill="#0c1014" />
-        <rect x="24" y="68" width="118" height="52" rx="3" fill="#10151b" stroke="#53e2cb" />
-        <text x="83" y="99" fill="#e1e6ef" fontSize="12" textAnchor="middle" fontFamily="monospace">
+        <rect width="640" height="200" fill="#0a0a0a" />
+        <rect x="24" y="68" width="118" height="52" rx="3" fill="#141414" stroke="#ffffff" />
+        <text x="83" y="99" fill="#ffffff" fontSize="12" textAnchor="middle" fontFamily="monospace">
           Partner
         </text>
-        <path d="M152 94 H214" stroke="#53e2cb" strokeWidth="1.5" />
-        <rect x="220" y="40" width="200" height="108" rx="3" fill="#10151b" stroke="#29313b" />
-        <text x="320" y="70" fill="#53e2cb" fontSize="11" textAnchor="middle" fontFamily="monospace">
+        <path d="M152 94 H214" stroke="#ffffff" strokeWidth="1.5" />
+        <rect x="220" y="40" width="200" height="108" rx="3" fill="#141414" stroke="#292929" />
+        <text x="320" y="70" fill="#ffffff" fontSize="11" textAnchor="middle" fontFamily="monospace">
           .NET REST API
         </text>
-        <text x="320" y="92" fill="#929db0" fontSize="11" textAnchor="middle" fontFamily="monospace">
+        <text x="320" y="92" fill="#a3a3a3" fontSize="11" textAnchor="middle" fontFamily="monospace">
           Create · Patch · Get
         </text>
-        <text x="320" y="114" fill="#929db0" fontSize="11" textAnchor="middle" fontFamily="monospace">
+        <text x="320" y="114" fill="#a3a3a3" fontSize="11" textAnchor="middle" fontFamily="monospace">
           validation · mapping
         </text>
-        <path d="M430 94 H492" stroke="#e5b477" strokeWidth="1.5" />
-        <rect x="498" y="68" width="118" height="52" rx="3" fill="#10151b" stroke="#e5b477" />
-        <text x="557" y="92" fill="#e1e6ef" fontSize="12" textAnchor="middle" fontFamily="monospace">
+        <path d="M430 94 H492" stroke="#a3a3a3" strokeWidth="1.5" />
+        <rect x="498" y="68" width="118" height="52" rx="3" fill="#141414" stroke="#a3a3a3" />
+        <text x="557" y="92" fill="#ffffff" fontSize="12" textAnchor="middle" fontFamily="monospace">
           SQL Server
         </text>
-        <text x="557" y="110" fill="#929db0" fontSize="10" textAnchor="middle" fontFamily="monospace">
+        <text x="557" y="110" fill="#a3a3a3" fontSize="10" textAnchor="middle" fontFamily="monospace">
           procs · indexes
         </text>
       </svg>
@@ -79,7 +79,7 @@ function AgentFlowDiagram({
   return (
     <div className="diagram" role="img" aria-label={label}>
       <svg viewBox="0 0 640 120">
-        <rect width="640" height="120" fill="#0c1014" />
+        <rect width="640" height="120" fill="#0a0a0a" />
         {steps.map((s, i) => {
           const x = 24 + i * (boxW + gap);
           return (
@@ -87,7 +87,7 @@ function AgentFlowDiagram({
               {i > 0 ? (
                 <path
                   d={`M${x - gap} 60 H${x}`}
-                  stroke="#53e2cb"
+                  stroke="#ffffff"
                   strokeWidth="1.25"
                 />
               ) : null}
@@ -97,13 +97,13 @@ function AgentFlowDiagram({
                 width={boxW}
                 height="52"
                 rx="3"
-                fill="#10151b"
-                stroke={i === steps.length - 1 ? "#e5b477" : "#29313b"}
+                fill="#141414"
+                stroke={i === steps.length - 1 ? "#a3a3a3" : "#292929"}
               />
               <text
                 x={x + boxW / 2}
                 y="65"
-                fill="#e1e6ef"
+                fill="#ffffff"
                 fontSize="11"
                 textAnchor="middle"
                 fontFamily="monospace"

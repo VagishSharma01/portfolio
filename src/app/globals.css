@@ -1,19 +1,25 @@
 @import "tailwindcss";
 
 :root {
-  --void: #090d10;
-  --panel: #131921;
-  --panel-2: #10151b;
-  --mist: #e1e6ef;
-  --muted: #929db0;
-  --line: #29313b;
-  --signal: #53e2cb;
-  --ember: #e5b477;
+  /* Monochrome system — black / white / grayscale only */
+  --void: #050505;
+  --panel: #101010;
+  --panel-2: #141414;
+  --elevated: #141414;
+  --mist: #ffffff;
+  --muted: #a3a3a3;
+  --meta: #737373;
+  --line: #292929;
+  --signal: #ffffff; /* primary accent */
+  --ember: #737373; /* metadata accent */
+  --ink: #050505; /* text on white buttons */
+  --hover-border: #ffffff;
+  --hover-surface: #1a1a1a;
   --font-display: var(--font-space);
   --font-body: var(--font-inter);
   --font-mono: var(--font-jb);
   --read: 68ch;
-  --radius: 4px;
+  --radius: 3px;
   --pad: 1.75rem;
   --section-gap: 4.5rem;
   --header-h: 3.5rem;
@@ -48,8 +54,7 @@ body {
   min-height: 100%;
   color: var(--mist);
   background:
-    radial-gradient(ellipse 80% 50% at 10% -10%, rgba(83, 226, 203, 0.07), transparent 55%),
-    radial-gradient(ellipse 60% 40% at 90% 0%, rgba(229, 180, 119, 0.04), transparent 50%),
+    radial-gradient(ellipse 70% 45% at 12% -8%, rgba(255, 255, 255, 0.035), transparent 55%),
     var(--void);
   font-family: var(--font-body), system-ui, sans-serif;
   font-size: 17px;
@@ -68,7 +73,7 @@ a {
 }
 
 ::selection {
-  background: rgba(83, 226, 203, 0.25);
+  background: rgba(255, 255, 255, 0.18);
   color: #fff;
 }
 
@@ -78,8 +83,8 @@ a {
   top: -100px;
   z-index: 100;
   padding: 0.65rem 0.9rem;
-  background: var(--signal);
-  color: #06241d;
+  background: #ffffff;
+  color: var(--ink);
   font-family: var(--font-mono), monospace;
   font-size: 12px;
   letter-spacing: 0.06em;
@@ -96,7 +101,7 @@ a {
   position: fixed;
   inset: 0;
   z-index: 60;
-  opacity: 0.05;
+  opacity: 0.035;
   mix-blend-mode: overlay;
 }
 
@@ -106,8 +111,8 @@ a {
   inset: -10%;
   z-index: 0;
   background-image:
-    linear-gradient(rgba(225, 230, 239, 0.028) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(225, 230, 239, 0.028) 1px, transparent 1px);
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   background-size: 72px 72px;
   mask-image: radial-gradient(ellipse at 22% 12%, black 12%, transparent 62%);
 }
@@ -125,7 +130,7 @@ a {
   width: 100%;
   z-index: 70;
   transform-origin: left;
-  background: linear-gradient(90deg, var(--signal), var(--ember));
+  background: linear-gradient(90deg, #ffffff, #737373);
 }
 
 .layout {
@@ -157,7 +162,7 @@ a {
   z-index: 40;
   min-height: var(--header-h);
   padding: 0.7rem 1rem;
-  background: rgba(9, 13, 16, 0.92);
+  background: rgba(5, 5, 5, 0.94);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--line);
 }
@@ -199,7 +204,7 @@ a {
   right: 0;
   top: 100%;
   padding: 0.75rem 1rem 1rem;
-  background: rgba(9, 13, 16, 0.97);
+  background: rgba(5, 5, 5, 0.97);
   border-bottom: 1px solid var(--line);
 }
 
@@ -230,7 +235,7 @@ a {
 .mobile-drawer a:hover,
 .mobile-drawer a:focus-visible {
   color: var(--mist);
-  border-color: rgba(83, 226, 203, 0.45);
+  border-color: #ffffff;
 }
 
 .mobile-drawer .num {
@@ -355,21 +360,22 @@ a {
 }
 
 .btn:hover {
-  border-color: rgba(83, 226, 203, 0.5);
-  color: var(--signal);
+  border-color: var(--hover-border);
+  color: #ffffff;
+  background: var(--hover-surface);
 }
 
 .btn-primary {
-  background: var(--signal);
-  border-color: var(--signal);
-  color: #06241d;
+  background: #ffffff;
+  border-color: #ffffff;
+  color: var(--ink);
   font-weight: 600;
 }
 
 .btn-primary:hover {
-  background: #6fe9d4;
-  border-color: #6fe9d4;
-  color: #06241d;
+  background: #e5e5e5;
+  border-color: #e5e5e5;
+  color: var(--ink);
 }
 
 /* —— Chapters —— */
@@ -378,7 +384,7 @@ a {
   padding: var(--pad);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: linear-gradient(180deg, rgba(19, 25, 33, 0.98), rgba(16, 21, 27, 0.96));
+  background: linear-gradient(180deg, #101010, #0c0c0c);
   scroll-margin-top: calc(var(--header-h) + 0.75rem);
 }
 
@@ -512,7 +518,7 @@ a {
 }
 
 .case:hover {
-  border-color: rgba(83, 226, 203, 0.42);
+  border-color: #ffffff;
 }
 
 .case-top {
@@ -535,8 +541,8 @@ a {
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #06241d;
-  background: var(--signal);
+  color: var(--ink);
+  background: #ffffff;
   border-radius: 2px;
   padding: 0.2rem 0.45rem;
   margin-left: 0.45rem;
@@ -555,11 +561,11 @@ a {
   font-size: 11px;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--ember);
-  border: 1px solid rgba(229, 180, 119, 0.28);
+  color: var(--meta);
+  border: 1px solid var(--line);
   border-radius: 2px;
   padding: 0.22rem 0.45rem;
-  background: rgba(229, 180, 119, 0.05);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .case .outcome {
@@ -581,8 +587,8 @@ a {
 .highlight {
   margin-top: 0.85rem;
   padding: 0.75rem 0.85rem;
-  border-left: 2px solid var(--signal);
-  background: rgba(83, 226, 203, 0.05);
+  border-left: 2px solid #ffffff;
+  background: rgba(255, 255, 255, 0.03);
   color: var(--muted);
   font-size: 0.9rem;
   line-height: 1.55;
@@ -602,7 +608,7 @@ a {
   margin-top: 0.95rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: #0c1014;
+  background: #0a0a0a;
   padding: 0.85rem;
   overflow: auto;
 }
@@ -618,7 +624,7 @@ a {
   margin-top: 0.95rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: #0c1014;
+  background: #0a0a0a;
   overflow: auto;
 }
 
@@ -628,7 +634,7 @@ a {
   font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 12px;
   line-height: 1.5;
-  color: #c7d0de;
+  color: #c4c4c4;
 }
 
 /* —— Experience —— */
@@ -683,8 +689,8 @@ a {
 .challenge {
   margin-top: 0.9rem;
   padding: 0.85rem 0.95rem;
-  border-left: 2px solid var(--signal);
-  background: rgba(83, 226, 203, 0.05);
+  border-left: 2px solid #ffffff;
+  background: rgba(255, 255, 255, 0.03);
   color: var(--muted);
   font-size: 0.9rem;
   max-width: var(--read);
