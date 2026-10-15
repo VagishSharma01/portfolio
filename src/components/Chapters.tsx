@@ -2,10 +2,11 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import { projects } from "@/lib/projects";
+import { ArchitectureWalkthrough } from "@/components/ArchitectureWalkthrough";
 import { CopyEmail } from "@/components/CopyEmail";
 import { CountUp } from "@/components/CountUp";
-import { RequestFlow } from "@/components/RequestFlow";
 import { useIntroReady } from "@/components/Intro";
+import { ProjectVisual } from "@/components/ProjectVisuals";
 import { TextReveal } from "@/components/TextReveal";
 import {
   cardHover,
@@ -61,132 +62,16 @@ function Chapter({
   );
 }
 
-function AgentFlowDiagram({
-  label,
-  steps,
-}: {
-  label: string;
-  steps: string[];
-}) {
-  const w = 640;
-  const gap = 12;
-  const boxW = (w - 48 - gap * (steps.length - 1)) / steps.length;
-  const reduce = useReducedMotion();
-  return (
-    <div className="diagram case-preview" role="img" aria-label={label}>
-      <svg viewBox="0 0 640 120">
-        <rect width="640" height="120" fill="#0a0a0a" />
-        {steps.map((s, i) => {
-          const x = 24 + i * (boxW + gap);
-          return (
-            <motion.g
-              key={s}
-              initial={reduce ? false : { opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: 0.06 + i * 0.07, ease: easeExpo }}
-            >
-              {i > 0 ? (
-                <motion.path
-                  d={`M${x - gap} 60 H${x}`}
-                  stroke="#ffffff"
-                  strokeWidth="1.25"
-                  initial={reduce ? false : { pathLength: 0 }}
-                  whileInView={{ pathLength: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.35, delay: 0.1 + i * 0.07 }}
-                />
-              ) : null}
-              <rect
-                x={x}
-                y="34"
-                width={boxW}
-                height="52"
-                rx="3"
-                fill="#141414"
-                stroke={i === steps.length - 1 ? "#a3a3a3" : "#292929"}
-              />
-              <text
-                x={x + boxW / 2}
-                y="65"
-                fill="#ffffff"
-                fontSize="11"
-                textAnchor="middle"
-                fontFamily="monospace"
-              >
-                {s}
-              </text>
-            </motion.g>
-          );
-        })}
-      </svg>
-    </div>
-  );
-}
-
-function ProjectVisual({ slug }: { slug: string }) {
-  if (slug === "service-order-api") return <RequestFlow />;
-  if (slug === "pr-review-agents") {
-    return (
-      <AgentFlowDiagram
-        label="Security, Performance, Style agents into Lead Reviewer"
-        steps={["Security", "Perf", "Style", "Lead"]}
-      />
-    );
-  }
-  if (slug === "market-analyst-agent") {
-    return (
-      <AgentFlowDiagram
-        label="Quote, news, metrics tools into briefing"
-        steps={["Quote", "News", "Metrics", "Report"]}
-      />
-    );
-  }
-  if (slug === "doc-intel-agent") {
-    return (
-      <AgentFlowDiagram
-        label="Plan, OCR, extract, validate, persist"
-        steps={["Plan", "OCR", "Extract", "Validate"]}
-      />
-    );
-  }
-  if (slug === "sql-database") {
-    return (
-      <div className="code-panel case-preview" aria-label="SQL schema excerpt">
-        <pre>{`CREATE TABLE users (
-  user_id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  username VARCHAR(255) UNIQUE NOT NULL,
-  email VARCHAR(30) NOT NULL
-);
-CREATE TABLE post (
-  post_id INTEGER AUTO_INCREMENT PRIMARY KEY,
-  user_id INTEGER NOT NULL,
-  FOREIGN KEY(user_id) REFERENCES users(user_id)
-);`}</pre>
-      </div>
-    );
-  }
-  if (slug === "flight-booking") {
-    return (
-      <AgentFlowDiagram
-        label="Client to API to SQL with JWT"
-        steps={["React", "Web API", "JWT", "SQL"]}
-      />
-    );
-  }
-  return null;
-}
-
 export function Chapters() {
   const reduce = useReducedMotion();
   const introReady = useIntroReady();
   const go = reduce || introReady;
 
   return (
-    <div>
+    <div className="chapters">
       <motion.section
         id="hero"
-        className="chapter chapter-hero"
+        className="chapter chapter-hero chapter-editorial"
         aria-labelledby="hero-title"
         initial={reduce ? false : { opacity: 0 }}
         animate={{ opacity: go ? 1 : 0 }}
@@ -210,14 +95,14 @@ export function Chapters() {
             text="I build backend systems"
             as="span"
             className="hero-title-line"
-            delay={0.12}
+            delay={0.14}
             active={go}
           />
           <TextReveal
             text="that work in production."
             as="span"
             className="hero-title-line"
-            delay={0.48}
+            delay={0.55}
             active={go}
           />
         </h1>
@@ -226,15 +111,15 @@ export function Chapters() {
           className="hero-stack"
           initial={reduce ? false : { opacity: 0, y: 12 }}
           animate={go ? { opacity: 1, y: 0 } : { opacity: 0, y: 12 }}
-          transition={{ duration: 0.6, delay: go ? 0.85 : 0, ease: easeExpo }}
+          transition={{ duration: 0.6, delay: go ? 0.95 : 0, ease: easeExpo }}
         >
           C# / .NET / REST APIs / SQL SERVER / AZURE
         </motion.p>
         <motion.p
-          className="lead"
+          className="lead lead-editorial"
           initial={reduce ? false : { opacity: 0, y: 14 }}
           animate={go ? { opacity: 1, y: 0 } : { opacity: 0, y: 14 }}
-          transition={{ duration: 0.65, delay: go ? 0.98 : 0, ease: easeExpo }}
+          transition={{ duration: 0.65, delay: go ? 1.08 : 0, ease: easeExpo }}
         >
           Software engineer focused on reliable APIs, database performance, and
           enterprise integrations. I build and troubleshoot backend workflows,
@@ -245,7 +130,7 @@ export function Chapters() {
           className="cta-row"
           initial={reduce ? false : { opacity: 0, y: 16 }}
           animate={go ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
-          transition={{ ...springSoft, delay: go ? 1.1 : 0 }}
+          transition={{ ...springSoft, delay: go ? 1.2 : 0 }}
         >
           <motion.a
             className="btn btn-primary"
@@ -265,8 +150,18 @@ export function Chapters() {
             Download résumé ↓
           </motion.a>
         </motion.div>
+
         <motion.div
-          className="proof"
+          className="signature-slot"
+          initial={reduce ? false : { opacity: 0, y: 24 }}
+          animate={go ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+          transition={{ duration: 0.85, delay: go ? 1.35 : 0, ease: easeExpo }}
+        >
+          <ArchitectureWalkthrough startDelay={600} />
+        </motion.div>
+
+        <motion.div
+          className="proof proof-editorial"
           aria-label="Proof points"
           initial={reduce ? false : "hidden"}
           animate={go ? "show" : "hidden"}

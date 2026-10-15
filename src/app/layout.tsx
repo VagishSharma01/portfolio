@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+import { Figtree, JetBrains_Mono, Syne } from "next/font/google";
 import "./globals.css";
 import { Intro } from "@/components/Intro";
 import { Providers } from "@/components/Providers";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { ScrollTextures } from "@/components/ScrollTextures";
 
-const space = Space_Grotesk({
-  variable: "--font-space",
+const syne = Syne({
+  variable: "--font-syne",
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
+  weight: ["600", "700", "800"],
 });
 
-const inter = Inter({
-  variable: "--font-inter",
+const figtree = Figtree({
+  variable: "--font-figtree",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
 });
@@ -50,7 +50,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${space.variable} ${inter.variable} ${jb.variable} h-full`}
+      className={`${syne.variable} ${figtree.variable} ${jb.variable} h-full`}
     >
       <body className="min-h-full antialiased">
         <a className="skip-link" href="#main">

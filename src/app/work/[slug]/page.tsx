@@ -5,6 +5,7 @@ import {
   CaseStudyMotion,
   CaseTitle,
 } from "@/components/CaseStudyMotion";
+import { ProjectVisual } from "@/components/ProjectVisuals";
 import { getProject, projects } from "@/lib/projects";
 
 export function generateStaticParams() {
@@ -56,6 +57,17 @@ export default async function WorkCaseStudy({
             <strong>Highlight — </strong>
             {project.highlight}
           </p>
+        </CaseBlock>
+
+        <CaseBlock>
+          <section className="case-visual-section">
+            <h2>System view</h2>
+            <p className="case-visual-lead">
+              Architecture and request path for this project — interactive where
+              the production service-order platform is featured.
+            </p>
+            <ProjectVisual slug={project.slug} variant="case" />
+          </section>
         </CaseBlock>
 
         <CaseBlock>
