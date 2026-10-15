@@ -35,7 +35,8 @@ export function Intro({ children }: { children: React.ReactNode }) {
       }
       setReady(false);
       setVeil(true);
-      hold = window.setTimeout(() => setVeil(false), 720);
+      // Hold long enough to read the mark, then lift into hero choreography.
+      hold = window.setTimeout(() => setVeil(false), 1100);
       reveal = window.setTimeout(() => {
         setReady(true);
         try {
@@ -43,7 +44,7 @@ export function Intro({ children }: { children: React.ReactNode }) {
         } catch {
           /* ignore */
         }
-      }, 1180);
+      }, 1650);
     });
 
     return () => {
