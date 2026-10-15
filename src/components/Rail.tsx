@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "motion/react";
+import { springSnappy } from "@/lib/motion";
 
 const links = [
   { href: "#hero", id: "hero", label: "Profile", num: "00" },
@@ -13,6 +15,7 @@ const links = [
 
 export function Rail() {
   const [active, setActive] = useState("hero");
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     const sections = links
@@ -46,26 +49,45 @@ export function Rail() {
       </p>
 
       <nav className="rail-nav" aria-label="Sections">
-        {links.map((l) => (
-          <a
-            key={l.id}
-            href={l.href}
-            className={active === l.id ? "active" : undefined}
-            aria-current={active === l.id ? "true" : undefined}
-          >
-            <span className="num" aria-hidden>
-              {l.num}
-            </span>
-            <span className="tick" aria-hidden />
-            {l.label}
-          </a>
-        ))}
+        {links.map((l) => {
+          const isActive = active === l.id;
+          return (
+            <a
+              key={l.id}
+              href={l.href}
+              className={isActive ? "active" : undefined}
+              aria-current={isActive ? "true" : undefined}
+            >
+              <span className="num" aria-hidden>
+                {l.num}
+              </span>
+              <span className="tick-wrap" aria-hidden>
+                {isActive && !reduce ? (
+                  <motion.span
+                    className="tick active-tick"
+                    layoutId="rail-tick"
+                    transition={springSnappy}
+                  />
+                ) : (
+                  <span className={`tick${isActive ? " active-tick" : ""}`} />
+                )}
+              </span>
+              {l.label}
+            </a>
+          );
+        })}
       </nav>
 
       <div className="rail-links">
-        <a className="btn btn-primary" href="/Vagish_Sharma_Resume.pdf" download>
+        <motion.a
+          className="btn btn-primary"
+          href="/Vagish_Sharma_Resume.pdf"
+          download
+          whileHover={reduce ? undefined : { y: -1 }}
+          whileTap={reduce ? undefined : { scale: 0.98 }}
+        >
           Résumé
-        </a>
+        </motion.a>
         <a className="btn" href="mailto:vagishsharma1234@gmail.com">
           Email
         </a>

@@ -911,6 +911,101 @@ a {
   letter-spacing: 0.06em;
 }
 
+
+
+/* —— Motion: hero line reveal —— */
+.hero-title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.08em;
+  max-width: 14ch;
+}
+
+.hero-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.06em;
+}
+
+.hero-line-inner {
+  display: block;
+  will-change: transform;
+}
+
+.hero-title-line {
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+/* —— Motion: rail tick —— */
+.tick-wrap {
+  display: inline-flex;
+  align-items: center;
+  width: 28px;
+  height: 1px;
+  position: relative;
+}
+
+.rail-nav .tick {
+  display: block;
+  width: 14px;
+  height: 1px;
+  background: currentColor;
+}
+
+.rail-nav .tick.active-tick,
+.rail-nav a.active .tick {
+  width: 28px;
+  background: #ffffff;
+}
+
+.rail-nav a:hover .tick:not(.active-tick) {
+  width: 22px;
+  background: #ffffff;
+}
+
+/* —— Motion: project preview —— */
+.case-preview-wrap {
+  margin-top: 0.95rem;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+.case-preview-wrap .diagram,
+.case-preview-wrap .code-panel {
+  margin-top: 0;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  transform-origin: center;
+}
+
+.case:hover .case-preview-wrap .diagram,
+.case:hover .case-preview-wrap .code-panel {
+  transform: scale(1.03);
+}
+
+.btn-arrow span {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.case:hover .btn-arrow span {
+  transform: translate(2px, -1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-preview-wrap .diagram,
+  .case-preview-wrap .code-panel,
+  .btn-arrow span {
+    transition: none !important;
+    transform: none !important;
+  }
+
+  .case:hover .case-preview-wrap .diagram,
+  .case:hover .case-preview-wrap .code-panel {
+    transform: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

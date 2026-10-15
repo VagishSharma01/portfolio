@@ -1,14 +1,18 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { motion, useScroll, useSpring, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from "motion/react";
 
-/** Subtle grain + progress only — no scroll-jacking or heavy parallax. */
+/** Subtle grain + scroll progress — no scroll-jacking. */
 export function ScrollTextures() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll();
-  const progress = useSpring(scrollYProgress, { stiffness: 140, damping: 32 });
-  const grainOpacity = useTransform(scrollYProgress, [0, 1], [0.04, 0.07]);
+  const progress = useSpring(scrollYProgress, {
+    stiffness: reduce ? 1000 : 140,
+    damping: reduce ? 100 : 32,
+  });
+  const grainOpacity = useTransform(scrollYProgress, [0, 1], [0.03, 0.055]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -27,7 +31,7 @@ export function ScrollTextures() {
       img.data[i] = v;
       img.data[i + 1] = v;
       img.data[i + 2] = v;
-      img.data[i + 3] = Math.random() > 0.7 ? 40 : 0;
+      img.data[i + 3] = Math.random() > 0.72 ? 36 : 0;
     }
     tctx.putImageData(img, 0, 0);
     const pattern = ctx.createPattern(tile, "repeat");
@@ -41,7 +45,7 @@ export function ScrollTextures() {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
       if (pattern) {
-        ctx.globalAlpha = 0.55;
+        ctx.globalAlpha = 0.5;
         ctx.fillStyle = pattern;
         ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
       }

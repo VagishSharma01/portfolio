@@ -1,8 +1,11 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "motion/react";
 import { projects } from "@/lib/projects";
 import { CopyEmail } from "@/components/CopyEmail";
+import { CountUp } from "@/components/CountUp";
+import { RequestFlow } from "@/components/RequestFlow";
+import { easeOut, sectionReveal, springSoft } from "@/lib/motion";
 
 function Chapter({
   id,
@@ -15,14 +18,19 @@ function Chapter({
   title: string;
   children: React.ReactNode;
 }) {
+  const reduce = useReducedMotion();
   return (
     <motion.section
       id={id}
       className="chapter"
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.12 }}
-      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      {...(reduce
+        ? {}
+        : {
+            initial: sectionReveal.initial,
+            whileInView: sectionReveal.whileInView,
+            viewport: sectionReveal.viewport,
+            transition: sectionReveal.transition,
+          })}
     >
       <div className="chapter-head">
         <h2>{title}</h2>
@@ -33,36 +41,36 @@ function Chapter({
   );
 }
 
-function ApiDiagram() {
+function HeroLine({
+  text,
+  delay = 0,
+  as: Tag = "span",
+  className,
+}: {
+  text: string;
+  delay?: number;
+  as?: "span" | "h1";
+  className?: string;
+}) {
+  const reduce = useReducedMotion();
+  if (reduce) {
+    return Tag === "h1" ? (
+      <h1 className={className}>{text}</h1>
+    ) : (
+      <span className={className}>{text}</span>
+    );
+  }
   return (
-    <div className="diagram" role="img" aria-label="Partner clients to .NET REST API to SQL Server">
-      <svg viewBox="0 0 640 200">
-        <rect width="640" height="200" fill="#0a0a0a" />
-        <rect x="24" y="68" width="118" height="52" rx="3" fill="#141414" stroke="#ffffff" />
-        <text x="83" y="99" fill="#ffffff" fontSize="12" textAnchor="middle" fontFamily="monospace">
-          Partner
-        </text>
-        <path d="M152 94 H214" stroke="#ffffff" strokeWidth="1.5" />
-        <rect x="220" y="40" width="200" height="108" rx="3" fill="#141414" stroke="#292929" />
-        <text x="320" y="70" fill="#ffffff" fontSize="11" textAnchor="middle" fontFamily="monospace">
-          .NET REST API
-        </text>
-        <text x="320" y="92" fill="#a3a3a3" fontSize="11" textAnchor="middle" fontFamily="monospace">
-          Create · Patch · Get
-        </text>
-        <text x="320" y="114" fill="#a3a3a3" fontSize="11" textAnchor="middle" fontFamily="monospace">
-          validation · mapping
-        </text>
-        <path d="M430 94 H492" stroke="#a3a3a3" strokeWidth="1.5" />
-        <rect x="498" y="68" width="118" height="52" rx="3" fill="#141414" stroke="#a3a3a3" />
-        <text x="557" y="92" fill="#ffffff" fontSize="12" textAnchor="middle" fontFamily="monospace">
-          SQL Server
-        </text>
-        <text x="557" y="110" fill="#a3a3a3" fontSize="10" textAnchor="middle" fontFamily="monospace">
-          procs · indexes
-        </text>
-      </svg>
-    </div>
+    <Tag className={`hero-line ${className ?? ""}`.trim()}>
+      <motion.span
+        className="hero-line-inner"
+        initial={{ y: "110%" }}
+        animate={{ y: "0%" }}
+        transition={{ ...springSoft, delay }}
+      >
+        {text}
+      </motion.span>
+    </Tag>
   );
 }
 
@@ -76,14 +84,21 @@ function AgentFlowDiagram({
   const w = 640;
   const gap = 12;
   const boxW = (w - 48 - gap * (steps.length - 1)) / steps.length;
+  const reduce = useReducedMotion();
   return (
-    <div className="diagram" role="img" aria-label={label}>
+    <div className="diagram case-preview" role="img" aria-label={label}>
       <svg viewBox="0 0 640 120">
         <rect width="640" height="120" fill="#0a0a0a" />
         {steps.map((s, i) => {
           const x = 24 + i * (boxW + gap);
           return (
-            <g key={s}>
+            <motion.g
+              key={s}
+              initial={reduce ? false : { opacity: 0, y: 6 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.35, delay: 0.05 + i * 0.06 }}
+            >
               {i > 0 ? (
                 <path
                   d={`M${x - gap} 60 H${x}`}
@@ -110,7 +125,7 @@ function AgentFlowDiagram({
               >
                 {s}
               </text>
-            </g>
+            </motion.g>
           );
         })}
       </svg>
@@ -119,7 +134,7 @@ function AgentFlowDiagram({
 }
 
 function ProjectVisual({ slug }: { slug: string }) {
-  if (slug === "service-order-api") return <ApiDiagram />;
+  if (slug === "service-order-api") return <RequestFlow />;
   if (slug === "pr-review-agents") {
     return (
       <AgentFlowDiagram
@@ -146,7 +161,7 @@ function ProjectVisual({ slug }: { slug: string }) {
   }
   if (slug === "sql-database") {
     return (
-      <div className="code-panel" aria-label="SQL schema excerpt">
+      <div className="code-panel case-preview" aria-label="SQL schema excerpt">
         <pre>{`CREATE TABLE users (
   user_id INTEGER AUTO_INCREMENT PRIMARY KEY,
   username VARCHAR(255) UNIQUE NOT NULL,
@@ -172,49 +187,100 @@ CREATE TABLE post (
 }
 
 export function Chapters() {
+  const reduce = useReducedMotion();
+
   return (
     <div>
       <motion.section
         id="hero"
         className="chapter"
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
         aria-labelledby="hero-title"
+        initial={reduce ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.35 }}
       >
-        <p className="hero-kicker">Vagish Sharma / Software Engineering · 00 — Profile</p>
+        <motion.p
+          className="hero-kicker"
+          initial={reduce ? false : { opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.05, ease: easeOut }}
+        >
+          Vagish Sharma / Software Engineering · 00 — Profile
+        </motion.p>
+
         <h1 id="hero-title" className="hero-title">
-          I build backend systems that work in production.
+          <HeroLine text="I build backend systems" delay={0.12} className="hero-title-line" />
+          <HeroLine text="that work in production." delay={0.22} className="hero-title-line" />
         </h1>
-        <p className="hero-stack">C# / .NET / REST APIs / SQL SERVER / AZURE</p>
-        <p className="lead">
+
+        <motion.p
+          className="hero-stack"
+          initial={reduce ? false : { opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.38, ease: easeOut }}
+        >
+          C# / .NET / REST APIs / SQL SERVER / AZURE
+        </motion.p>
+        <motion.p
+          className="lead"
+          initial={reduce ? false : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.48, ease: easeOut }}
+        >
           Software engineer focused on reliable APIs, database performance, and
           enterprise integrations. I build and troubleshoot backend workflows,
           optimize SQL queries, and turn production issues into measurable
           improvements.
-        </p>
-        <div className="cta-row">
-          <a className="btn btn-primary" href="#work">
+        </motion.p>
+        <motion.div
+          className="cta-row"
+          initial={reduce ? false : { opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...springSoft, delay: 0.58 }}
+        >
+          <motion.a
+            className="btn btn-primary"
+            href="#work"
+            whileHover={reduce ? undefined : { y: -2 }}
+            whileTap={reduce ? undefined : { scale: 0.98 }}
+          >
             Explore selected work ↗
-          </a>
-          <a className="btn" href="/Vagish_Sharma_Resume.pdf" download>
+          </motion.a>
+          <motion.a
+            className="btn"
+            href="/Vagish_Sharma_Resume.pdf"
+            download
+            whileHover={reduce ? undefined : { y: -2 }}
+            whileTap={reduce ? undefined : { scale: 0.98 }}
+          >
             Download résumé ↓
-          </a>
-        </div>
-        <div className="proof" aria-label="Proof points">
+          </motion.a>
+        </motion.div>
+        <motion.div
+          className="proof"
+          aria-label="Proof points"
+          initial={reduce ? false : { opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.72, ease: easeOut }}
+        >
           <div className="proof-item">
-            <strong>50+</strong>
+            <strong>
+              <CountUp value={50} suffix="+" />
+            </strong>
             <span>Backend / integration defects resolved</span>
           </div>
           <div className="proof-item">
-            <strong>~30%</strong>
+            <strong>
+              ~
+              <CountUp value={30} suffix="%" />
+            </strong>
             <span>Service-order query latency reduction</span>
           </div>
           <div className="proof-item">
             <strong>.NET</strong>
             <span>Core engineering specialization</span>
           </div>
-        </div>
+        </motion.div>
       </motion.section>
 
       <Chapter id="work" num="01" title="Selected work">
@@ -223,8 +289,23 @@ export function Chapters() {
           and SQL engineering. Open a case study for architecture and decisions.
         </p>
         <div className="projects">
-          {projects.map((p) => (
-            <article key={p.slug} className="case">
+          {projects.map((p, index) => (
+            <motion.article
+              key={p.slug}
+              className="case"
+              initial={reduce ? false : { opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.18 }}
+              transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.2), ease: easeOut }}
+              whileHover={
+                reduce
+                  ? undefined
+                  : {
+                      y: -3,
+                      transition: { type: "spring", stiffness: 380, damping: 28 },
+                    }
+              }
+            >
               <div className="case-top">
                 <h3>
                   {p.title}
@@ -240,15 +321,22 @@ export function Chapters() {
               </div>
               <p className="outcome">{p.outcome}</p>
               <p className="detail">{p.problem}</p>
-              <ProjectVisual slug={p.slug} />
+              <div className="case-preview-wrap">
+                <ProjectVisual slug={p.slug} />
+              </div>
               <p className="highlight">
                 <strong>Highlight — </strong>
                 {p.highlight}
               </p>
               <div className="case-links">
-                <a className="btn btn-primary" href={`/work/${p.slug}`}>
+                <motion.a
+                  className="btn btn-primary btn-arrow"
+                  href={`/work/${p.slug}`}
+                  whileHover={reduce ? undefined : { x: 2 }}
+                >
                   Case study
-                </a>
+                  <span aria-hidden>↗</span>
+                </motion.a>
                 {p.links
                   .filter((l) => !l.href.startsWith("/work/"))
                   .slice(0, 2)
@@ -267,7 +355,7 @@ export function Chapters() {
                     </a>
                   ))}
               </div>
-            </article>
+            </motion.article>
           ))}
         </div>
       </Chapter>
@@ -498,9 +586,14 @@ export function Chapters() {
             performance matter.
           </p>
           <div className="cta-row">
-            <a className="btn btn-primary" href="mailto:vagishsharma1234@gmail.com">
+            <motion.a
+              className="btn btn-primary"
+              href="mailto:vagishsharma1234@gmail.com"
+              whileHover={reduce ? undefined : { y: -2 }}
+              whileTap={reduce ? undefined : { scale: 0.98 }}
+            >
               Email me ↗
-            </a>
+            </motion.a>
             <CopyEmail />
             <a
               className="btn"
